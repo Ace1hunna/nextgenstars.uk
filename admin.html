@@ -1,1 +1,1593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>NGS Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #050505;
+      --white: #f5f5f5;
+      --grey: #999;
+      --dark: #0b0b0b;
+      --line: #202020;
+      --danger: #b33;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .nav {
+      height: 75px;
+      padding: 0 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -2px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .status {
+      color: #777;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .logout {
+      background: transparent;
+      border: 1px solid #444;
+      color: #aaa;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .logout:hover {
+      color: white;
+      border-color: white;
+    }
+
+    .container {
+      width: min(1200px, 86%);
+      margin: 0 auto;
+      padding: 80px 0 120px;
+    }
+
+    .eyebrow {
+      color: #555;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 25px;
+    }
+
+    .title {
+      font-size: clamp(55px, 9vw, 120px);
+      line-height: .82;
+      letter-spacing: -7px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 70px;
+    }
+
+    .title span {
+      color: #555;
+    }
+
+    .login-box {
+      max-width: 500px;
+      margin: 80px auto;
+    }
+
+    .login-title {
+      font-size: 35px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+    }
+
+    .form {
+      display: grid;
+      gap: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    label {
+      color: #777;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      background: var(--dark);
+      color: white;
+      border: 1px solid #333;
+      padding: 15px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #777;
+    }
+
+    input[type="checkbox"] {
+      width: auto;
+      accent-color: white;
+    }
+
+    .button {
+      border: 1px solid #555;
+      background: white;
+      color: black;
+      padding: 16px 22px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: .2s;
+    }
+
+    .button:hover {
+      background: #ddd;
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: #aaa;
+      border-color: #444;
+    }
+
+    .button.secondary:hover {
+      color: white;
+      border-color: white;
+      background: #111;
+    }
+
+    .button.danger {
+      background: transparent;
+      color: #d66;
+      border-color: #633;
+    }
+
+    .button.danger:hover {
+      background: #211;
+      color: #f88;
+    }
+
+    .message {
+      padding: 15px;
+      border: 1px solid #333;
+      color: #aaa;
+      font-size: 13px;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .dashboard {
+      display: none;
+    }
+
+    .dashboard.show {
+      display: block;
+    }
+
+    .section {
+      border-top: 1px solid var(--line);
+      padding-top: 50px;
+      margin-top: 70px;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 30px;
+      margin-bottom: 35px;
+    }
+
+    .section-number {
+      color: #555;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 42px;
+      line-height: .9;
+      letter-spacing: -3px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .artist-form {
+      background: #080808;
+      border: 1px solid var(--line);
+      padding: 35px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #aaa;
+      font-size: 13px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .preview {
+      margin-top: 10px;
+      color: #666;
+      font-size: 12px;
+    }
+
+    .artist-list {
+      display: grid;
+      gap: 2px;
+      background: var(--line);
+    }
+
+    .artist-item {
+      background: #080808;
+      padding: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .artist-info h3 {
+      font-size: 25px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+    }
+
+    .artist-info p {
+      color: #777;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 7px;
+    }
+
+    .artist-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .artist-actions button {
+      padding: 10px 14px;
+      font-size: 9px;
+    }
+
+    .freestyle-list {
+      display: grid;
+      gap: 2px;
+      background: var(--line);
+      margin-top: 30px;
+    }
+
+    .freestyle-item {
+      background: #080808;
+      padding: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .freestyle-info h3 {
+      font-size: 20px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .freestyle-info p {
+      color: #777;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 7px;
+    }
+
+    .login-only {
+      display: block;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 800px) {
+      .nav {
+        padding: 0 5%;
+      }
+
+      .status {
+        display: none;
+      }
+
+      .container {
+        width: 90%;
+        padding-top: 60px;
+      }
+
+      .title {
+        letter-spacing: -4px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .full {
+        grid-column: auto;
+      }
+
+      .artist-item,
+      .freestyle-item {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .artist-form {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="nav">
+    <a href="index.html" class="logo">NGS★</a>
+
+    <div class="nav-right">
+      <div id="status" class="status">
+        Admin
+      </div>
+
+      <button id="logoutButton" class="logout hidden">
+        Sign Out
+      </button>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <section id="loginSection" class="login-only">
+
+      <div class="eyebrow">
+        NGS / Private Area
+      </div>
+
+      <div class="login-box">
+
+        <h1 class="login-title">
+          Admin Login
+        </h1>
+
+        <form id="loginForm" class="form">
+
+          <div class="field">
+            <label for="loginEmail">Email</label>
+
+            <input
+              type="email"
+              id="loginEmail"
+              autocomplete="email"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="loginPassword">Password</label>
+
+            <input
+              type="password"
+              id="loginPassword"
+              autocomplete="current-password"
+              required
+            >
+          </div>
+
+          <button class="button" type="submit">
+            Enter Admin
+          </button>
+
+          <div id="loginMessage" class="message"></div>
+
+        </form>
+
+      </div>
+
+    </section>
+
+    <section id="dashboard" class="dashboard">
+
+      <div class="eyebrow">
+        NGS / Content Management
+      </div>
+
+      <h1 class="title">
+        Manage<br>
+        <span>Artists.</span>
+      </h1>
+
+      <div class="section">
+
+        <div class="section-heading">
+          <div>
+            <div class="section-number">
+              01 / Artist
+            </div>
+
+            <h2 class="section-title">
+              Add Artist
+            </h2>
+          </div>
+        </div>
+
+        <form id="artistForm" class="artist-form">
+
+          <input type="hidden" id="artistId">
+
+          <div class="form-grid">
+
+            <div class="field">
+              <label for="artistName">
+                Artist Name *
+              </label>
+
+              <input
+                type="text"
+                id="artistName"
+                required
+              >
+            </div>
+
+            <div class="field">
+              <label for="artistAge">
+                Age
+              </label>
+
+              <input
+                type="number"
+                id="artistAge"
+                min="1"
+                max="100"
+              >
+            </div>
+
+            <div class="field">
+              <label for="artistArea">
+                Area / City
+              </label>
+
+              <input
+                type="text"
+                id="artistArea"
+                placeholder="North London"
+              >
+            </div>
+
+            <div class="field">
+              <label for="artistImage">
+                Profile Picture
+              </label>
+
+              <input
+                type="file"
+                id="artistImage"
+                accept="image/*"
+              >
+
+              <div id="imagePreview" class="preview"></div>
+            </div>
+
+            <div class="field full">
+              <label for="artistBio">
+                Bio
+              </label>
+
+              <textarea
+                id="artistBio"
+                placeholder="Tell people about the artist..."
+              ></textarea>
+            </div>
+
+            <div class="field">
+              <label for="artistTikTok">
+                TikTok
+              </label>
+
+              <input
+                type="url"
+                id="artistTikTok"
+                placeholder="https://www.tiktok.com/@..."
+              >
+            </div>
+
+            <div class="field">
+              <label for="artistInstagram">
+                Instagram
+              </label>
+
+              <input
+                type="url"
+                id="artistInstagram"
+                placeholder="https://www.instagram.com/..."
+              >
+            </div>
+
+            <div class="field">
+              <label for="artistSoundcloud">
+                SoundCloud
+              </label>
+
+              <input
+                type="url"
+                id="artistSoundcloud"
+                placeholder="https://soundcloud.com/..."
+              >
+            </div>
+
+            <div class="field">
+              <label for="artistSpotify">
+                Spotify
+              </label>
+
+              <input
+                type="url"
+                id="artistSpotify"
+                placeholder="https://open.spotify.com/..."
+              >
+            </div>
+
+            <div class="field">
+              <label for="artistYoutube">
+                YouTube
+              </label>
+
+              <input
+                type="url"
+                id="artistYoutube"
+                placeholder="https://youtube.com/..."
+              >
+            </div>
+
+            <div class="field">
+
+              <label>
+                Visibility
+              </label>
+
+              <label class="checkbox-row">
+
+                <input
+                  type="checkbox"
+                  id="artistPublished"
+                >
+
+                Publish artist publicly
+
+              </label>
+
+            </div>
+
+            <div class="field full">
+
+              <div class="form-actions">
+
+                <button
+                  type="submit"
+                  class="button"
+                  id="saveArtistButton"
+                >
+                  Save Artist
+                </button>
+
+                <button
+                  type="button"
+                  class="button secondary hidden"
+                  id="cancelEditButton"
+                >
+                  Cancel Edit
+                </button>
+
+              </div>
+
+            </div>
+
+            <div
+              id="artistMessage"
+              class="message full"
+            ></div>
+
+          </div>
+
+        </form>
+
+      </div>
+
+      <div class="section">
+
+        <div class="section-heading">
+
+          <div>
+
+            <div class="section-number">
+              02 / Existing
+            </div>
+
+            <h2 class="section-title">
+              Artists
+            </h2>
+
+          </div>
+
+        </div>
+
+        <div id="artistList" class="artist-list">
+
+          <div class="message show">
+            Loading artists...
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="section">
+
+        <div class="section-heading">
+
+          <div>
+
+            <div class="section-number">
+              03 / Content
+            </div>
+
+            <h2 class="section-title">
+              Add Freestyle
+            </h2>
+
+          </div>
+
+        </div>
+
+        <form id="freestyleForm" class="artist-form">
+
+          <div class="form-grid">
+
+            <div class="field full">
+
+              <label for="freestyleArtist">
+                Artist *
+              </label>
+
+              <select
+                id="freestyleArtist"
+                required
+              >
+                <option value="">
+                  Select artist
+                </option>
+              </select>
+
+            </div>
+
+            <div class="field">
+
+              <label for="freestyleTitle">
+                Freestyle Title *
+              </label>
+
+              <input
+                type="text"
+                id="freestyleTitle"
+                placeholder="NGS Freestyle #1"
+                required
+              >
+
+            </div>
+
+            <div class="field">
+
+              <label for="freestyleAudio">
+                Audio File *
+              </label>
+
+              <input
+                type="file"
+                id="freestyleAudio"
+                accept="audio/*"
+                required
+              >
+
+            </div>
+
+            <div class="field">
+
+              <label>
+                Visibility
+              </label>
+
+              <label class="checkbox-row">
+
+                <input
+                  type="checkbox"
+                  id="freestylePublished"
+                >
+
+                Publish freestyle publicly
+
+              </label>
+
+            </div>
+
+            <div class="field full">
+
+              <button
+                type="submit"
+                class="button"
+              >
+                Upload Freestyle
+              </button>
+
+            </div>
+
+            <div
+              id="freestyleMessage"
+              class="message full"
+            ></div>
+
+          </div>
+
+        </form>
+
+        <div id="freestyleList" class="freestyle-list"></div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+
+    const supabaseClient = window.supabase.createClient(
+      window.NGS_CONFIG.url,
+      window.NGS_CONFIG.publishableKey
+    );
+
+    const $ = id => document.getElementById(id);
+
+    let currentUser = null;
+    let artists = [];
+
+    function showMessage(element, message) {
+      element.textContent = message;
+      element.classList.add("show");
+    }
+
+    function hideMessage(element) {
+      element.textContent = "";
+      element.classList.remove("show");
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function safeFileName(name) {
+      return String(name || "file")
+        .replace(/[^a-zA-Z0-9._-]/g, "-")
+        .toLowerCase();
+    }
+
+    async function checkSession() {
+
+      const {
+        data: {
+          session
+        }
+      } = await supabaseClient.auth.getSession();
+
+      if (session) {
+        currentUser = session.user;
+        showDashboard();
+      } else {
+        showLogin();
+      }
+    }
+
+    function showLogin() {
+
+      $("loginSection").classList.remove("hidden");
+      $("dashboard").classList.remove("show");
+      $("logoutButton").classList.add("hidden");
+      $("status").textContent = "Admin";
+    }
+
+    async function showDashboard() {
+
+      $("loginSection").classList.add("hidden");
+      $("dashboard").classList.add("show");
+      $("logoutButton").classList.remove("hidden");
+
+      $("status").textContent = "Signed In";
+
+      await loadArtists();
+      await loadFreestyles();
+    }
+
+    $("loginForm").addEventListener("submit", async event => {
+
+      event.preventDefault();
+
+      const email = $("loginEmail").value.trim();
+      const password = $("loginPassword").value;
+
+      hideMessage($("loginMessage"));
+
+      const {
+        data,
+        error
+      } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) {
+
+        showMessage(
+          $("loginMessage"),
+          error.message
+        );
+
+        return;
+      }
+
+      currentUser = data.user;
+
+      $("loginForm").reset();
+
+      showDashboard();
+    });
+
+    $("logoutButton").addEventListener("click", async () => {
+
+      await supabaseClient.auth.signOut();
+
+      currentUser = null;
+
+      showLogin();
+
+    });
+
+    $("artistForm").addEventListener("submit", async event => {
+
+      event.preventDefault();
+
+      hideMessage($("artistMessage"));
+
+      const id = $("artistId").value.trim();
+
+      const name = $("artistName").value.trim();
+      const ageValue = $("artistAge").value.trim();
+      const area = $("artistArea").value.trim();
+      const bio = $("artistBio").value.trim();
+
+      const tiktok = $("artistTikTok").value.trim();
+      const instagram = $("artistInstagram").value.trim();
+      const soundcloud = $("artistSoundcloud").value.trim();
+      const spotify = $("artistSpotify").value.trim();
+      const youtube = $("artistYoutube").value.trim();
+
+      const published = $("artistPublished").checked;
+
+      if (!name) {
+
+        showMessage(
+          $("artistMessage"),
+          "Artist name is required."
+        );
+
+        return;
+      }
+
+      let imageUrl = null;
+
+      if (id) {
+
+        const existing = artists.find(
+          artist => artist.id === id
+        );
+
+        imageUrl = existing
+          ? existing.image_url
+          : null;
+      }
+
+      const imageFile = $("artistImage").files[0];
+
+      if (imageFile) {
+
+        const filePath =
+          `${crypto.randomUUID()}-${safeFileName(imageFile.name)}`;
+
+        const {
+          error: uploadError
+        } = await supabaseClient.storage
+          .from("artist-images")
+          .upload(filePath, imageFile, {
+            upsert: false
+          });
+
+        if (uploadError) {
+
+          showMessage(
+            $("artistMessage"),
+            `Image upload failed: ${uploadError.message}`
+          );
+
+          return;
+        }
+
+        const {
+          data: publicData
+        } = supabaseClient.storage
+          .from("artist-images")
+          .getPublicUrl(filePath);
+
+        imageUrl = publicData.publicUrl;
+      }
+
+      const artistData = {
+        name,
+        age: ageValue
+          ? Number(ageValue)
+          : null,
+        area: area || null,
+        bio: bio || null,
+        image_url: imageUrl,
+        tiktok: tiktok || null,
+        instagram: instagram || null,
+        soundcloud: soundcloud || null,
+        spotify: spotify || null,
+        youtube: youtube || null,
+        published
+      };
+
+      let error;
+
+      if (id) {
+
+        const result = await supabaseClient
+          .from("artists")
+          .update(artistData)
+          .eq("id", id);
+
+        error = result.error;
+
+      } else {
+
+        const result = await supabaseClient
+          .from("artists")
+          .insert(artistData);
+
+        error = result.error;
+      }
+
+      if (error) {
+
+        showMessage(
+          $("artistMessage"),
+          `Could not save artist: ${error.message}`
+        );
+
+        return;
+      }
+
+      showMessage(
+        $("artistMessage"),
+        id
+          ? "Artist updated successfully."
+          : "Artist added successfully."
+      );
+
+      resetArtistForm();
+
+      await loadArtists();
+
+    });
+
+    $("cancelEditButton").addEventListener("click", () => {
+
+      resetArtistForm();
+
+    });
+
+    function resetArtistForm() {
+
+      $("artistForm").reset();
+
+      $("artistId").value = "";
+
+      $("saveArtistButton").textContent = "Save Artist";
+
+      $("cancelEditButton").classList.add("hidden");
+
+      $("imagePreview").textContent = "";
+
+    }
+
+    async function loadArtists() {
+
+      const {
+        data,
+        error
+      } = await supabaseClient
+        .from("artists")
+        .select("*")
+        .order("created_at", {
+          ascending: false
+        });
+
+      if (error) {
+
+        $("artistList").innerHTML = `
+          <div class="message show">
+            ${escapeHtml(error.message)}
+          </div>
+        `;
+
+        return;
+      }
+
+      artists = data || [];
+
+      renderArtists();
+      populateArtistSelect();
+    }
+
+    function renderArtists() {
+
+      if (!artists.length) {
+
+        $("artistList").innerHTML = `
+          <div class="message show">
+            No artists have been added yet.
+          </div>
+        `;
+
+        return;
+      }
+
+      $("artistList").innerHTML = artists.map(artist => {
+
+        const meta = [
+          artist.area,
+          artist.age ? `${artist.age} YEARS` : "",
+          artist.published ? "PUBLISHED" : "DRAFT"
+        ]
+          .filter(Boolean)
+          .join(" / ");
+
+        return `
+          <div class="artist-item">
+
+            <div class="artist-info">
+
+              <h3>
+                ${escapeHtml(artist.name)}
+              </h3>
+
+              <p>
+                ${escapeHtml(meta)}
+              </p>
+
+            </div>
+
+            <div class="artist-actions">
+
+              <button
+                class="button secondary"
+                onclick="editArtist('${artist.id}')"
+              >
+                Edit
+              </button>
+
+              <button
+                class="button danger"
+                onclick="deleteArtist('${artist.id}')"
+              >
+                Delete
+              </button>
+
+            </div>
+
+          </div>
+        `;
+
+      }).join("");
+    }
+
+    function populateArtistSelect() {
+
+      $("freestyleArtist").innerHTML = `
+        <option value="">
+          Select artist
+        </option>
+      `;
+
+      artists.forEach(artist => {
+
+        const option = document.createElement("option");
+
+        option.value = artist.id;
+
+        option.textContent =
+          artist.name +
+          (
+            artist.published
+              ? ""
+              : " — DRAFT"
+          );
+
+        $("freestyleArtist").appendChild(option);
+
+      });
+    }
+
+    window.editArtist = function(id) {
+
+      const artist = artists.find(
+        item => item.id === id
+      );
+
+      if (!artist) return;
+
+      $("artistId").value = artist.id;
+      $("artistName").value = artist.name || "";
+      $("artistAge").value = artist.age || "";
+      $("artistArea").value = artist.area || "";
+      $("artistBio").value = artist.bio || "";
+
+      $("artistTikTok").value = artist.tiktok || "";
+      $("artistInstagram").value = artist.instagram || "";
+      $("artistSoundcloud").value = artist.soundcloud || "";
+      $("artistSpotify").value = artist.spotify || "";
+      $("artistYoutube").value = artist.youtube || "";
+
+      $("artistPublished").checked =
+        !!artist.published;
+
+      $("artistImage").value = "";
+
+      $("imagePreview").textContent =
+        artist.image_url
+          ? "Existing profile image will be kept unless you upload a new one."
+          : "No profile image uploaded.";
+
+      $("saveArtistButton").textContent =
+        "Update Artist";
+
+      $("cancelEditButton").classList.remove("hidden");
+
+      window.scrollTo({
+        top: $("artistForm").offsetTop - 40,
+        behavior: "smooth"
+      });
+
+    };
+
+    window.deleteArtist = async function(id) {
+
+      const artist = artists.find(
+        item => item.id === id
+      );
+
+      if (!artist) return;
+
+      const confirmed = confirm(
+        `Delete ${artist.name}? This will also delete their freestyles from the database.`
+      );
+
+      if (!confirmed) return;
+
+      const {
+        error
+      } = await supabaseClient
+        .from("artists")
+        .delete()
+        .eq("id", id);
+
+      if (error) {
+
+        alert(
+          `Could not delete artist: ${error.message}`
+        );
+
+        return;
+      }
+
+      await loadArtists();
+      await loadFreestyles();
+
+    };
+
+    $("freestyleForm").addEventListener("submit", async event => {
+
+      event.preventDefault();
+
+      hideMessage($("freestyleMessage"));
+
+      const artistId =
+        $("freestyleArtist").value;
+
+      const title =
+        $("freestyleTitle").value.trim();
+
+      const audioFile =
+        $("freestyleAudio").files[0];
+
+      const published =
+        $("freestylePublished").checked;
+
+      if (!artistId) {
+
+        showMessage(
+          $("freestyleMessage"),
+          "Please select an artist."
+        );
+
+        return;
+      }
+
+      if (!title) {
+
+        showMessage(
+          $("freestyleMessage"),
+          "Freestyle title is required."
+        );
+
+        return;
+      }
+
+      if (!audioFile) {
+
+        showMessage(
+          $("freestyleMessage"),
+          "Please select an audio file."
+        );
+
+        return;
+      }
+
+      const filePath =
+        `${crypto.randomUUID()}-${safeFileName(audioFile.name)}`;
+
+      const {
+        error: uploadError
+      } = await supabaseClient.storage
+        .from("freestyles")
+        .upload(filePath, audioFile, {
+          upsert: false
+        });
+
+      if (uploadError) {
+
+        showMessage(
+          $("freestyleMessage"),
+          `Audio upload failed: ${uploadError.message}`
+        );
+
+        return;
+      }
+
+      const {
+        data: publicData
+      } = supabaseClient.storage
+        .from("freestyles")
+        .getPublicUrl(filePath);
+
+      const audioUrl =
+        publicData.publicUrl;
+
+      const {
+        error
+      } = await supabaseClient
+        .from("freestyles")
+        .insert({
+          artist_id: artistId,
+          title,
+          audio_url: audioUrl,
+          published
+        });
+
+      if (error) {
+
+        showMessage(
+          $("freestyleMessage"),
+          `Could not save freestyle: ${error.message}`
+        );
+
+        return;
+      }
+
+      showMessage(
+        $("freestyleMessage"),
+        "Freestyle uploaded successfully."
+      );
+
+      $("freestyleForm").reset();
+
+      await loadFreestyles();
+
+    });
+
+    async function loadFreestyles() {
+
+      const {
+        data,
+        error
+      } = await supabaseClient
+        .from("freestyles")
+        .select(`
+          id,
+          title,
+          audio_url,
+          published,
+          created_at,
+          artist_id,
+          artists (
+            name
+          )
+        `)
+        .order("created_at", {
+          ascending: false
+        });
+
+      if (error) {
+
+        $("freestyleList").innerHTML = `
+          <div class="message show">
+            ${escapeHtml(error.message)}
+          </div>
+        `;
+
+        return;
+      }
+
+      renderFreestyles(data || []);
+
+    }
+
+    function renderFreestyles(freestyles) {
+
+      if (!freestyles.length) {
+
+        $("freestyleList").innerHTML = `
+          <div class="message show">
+            No freestyles have been uploaded yet.
+          </div>
+        `;
+
+        return;
+      }
+
+      $("freestyleList").innerHTML =
+        freestyles.map(track => {
+
+          const artistName =
+            track.artists
+              ? track.artists.name
+              : "Unknown Artist";
+
+          return `
+            <div class="freestyle-item">
+
+              <div class="freestyle-info">
+
+                <h3>
+                  ${escapeHtml(track.title)}
+                </h3>
+
+                <p>
+                  ${escapeHtml(artistName)}
+                  /
+                  ${track.published ? "PUBLISHED" : "DRAFT"}
+                </p>
+
+              </div>
+
+              <div class="artist-actions">
+
+                <button
+                  class="button secondary"
+                  onclick="toggleFreestyle('${track.id}', ${!track.published})"
+                >
+                  ${track.published ? "Unpublish" : "Publish"}
+                </button>
+
+                <button
+                  class="button danger"
+                  onclick="deleteFreestyle('${track.id}')"
+                >
+                  Delete
+                </button>
+
+              </div>
+
+            </div>
+          `;
+
+        }).join("");
+
+    }
+
+    window.toggleFreestyle = async function(id, published) {
+
+      const {
+        error
+      } = await supabaseClient
+        .from("freestyles")
+        .update({
+          published
+        })
+        .eq("id", id);
+
+      if (error) {
+
+        alert(
+          `Could not update freestyle: ${error.message}`
+        );
+
+        return;
+      }
+
+      await loadFreestyles();
+
+    };
+
+    window.deleteFreestyle = async function(id) {
+
+      const confirmed = confirm(
+        "Delete this freestyle?"
+      );
+
+      if (!confirmed) return;
+
+      const {
+        error
+      } = await supabaseClient
+        .from("freestyles")
+        .delete()
+        .eq("id", id);
+
+      if (error) {
+
+        alert(
+          `Could not delete freestyle: ${error.message}`
+        );
+
+        return;
+      }
+
+      await loadFreestyles();
+
+    };
+
+    supabaseClient.auth.onAuthStateChange(
+      (_event, session) => {
+
+        if (session) {
+
+          currentUser = session.user;
+          showDashboard();
+
+        } else {
+
+          currentUser = null;
+          showLogin();
+
+        }
+
+      }
+    );
+
+    checkSession();
+
+  </script>
+
+</body>
+</html>
