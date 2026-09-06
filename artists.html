@@ -1,1 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Artists — Next Gen Stars</title>
+  <meta name="description" content="Discover the next generation of artists on NGS.">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #050505;
+      --white: #f5f5f5;
+      --grey: #999;
+      --line: #202020;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 75px;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      height: 75px;
+      padding: 0 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(5,5,5,.9);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-logo {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -2px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #aaa;
+      transition: .2s;
+    }
+
+    .nav-links a:hover {
+      color: white;
+    }
+
+    .hero {
+      padding: 120px 7% 80px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      color: #666;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+    }
+
+    .title {
+      font-size: clamp(65px, 12vw, 170px);
+      line-height: .8;
+      letter-spacing: -9px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .title span {
+      color: #555;
+    }
+
+    .intro {
+      max-width: 600px;
+      margin-top: 55px;
+      color: #999;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .catalogue {
+      padding: 90px 7% 130px;
+    }
+
+    .catalogue-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 45px;
+    }
+
+    .catalogue-label {
+      color: #555;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .search {
+      width: 280px;
+      padding: 14px 16px;
+      background: #0b0b0b;
+      border: 1px solid #333;
+      color: white;
+      outline: none;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .search:focus {
+      border-color: #777;
+    }
+
+    .artists {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--line);
+    }
+
+    .artist {
+      min-height: 440px;
+      background: #080808;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+      transition: .3s;
+    }
+
+    .artist:hover {
+      background: #111;
+    }
+
+    .artist-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: .7;
+      transition: .4s;
+    }
+
+    .artist:hover .artist-image {
+      transform: scale(1.04);
+      opacity: .85;
+    }
+
+    .artist-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,.95),
+        rgba(0,0,0,.25) 65%,
+        rgba(0,0,0,.05)
+      );
+    }
+
+    .artist-content {
+      position: relative;
+      z-index: 2;
+      padding: 30px;
+    }
+
+    .artist-number {
+      position: absolute;
+      top: 25px;
+      right: 25px;
+      z-index: 3;
+      color: #aaa;
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+
+    .artist-name {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      text-transform: uppercase;
+    }
+
+    .artist-meta {
+      margin-top: 8px;
+      color: #aaa;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .artist-link {
+      display: inline-block;
+      margin-top: 20px;
+      padding-bottom: 7px;
+      border-bottom: 1px solid #777;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .empty,
+    .error {
+      grid-column: 1 / -1;
+      padding: 80px 30px;
+      text-align: center;
+      color: #777;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 16px;
+    }
+
+    footer {
+      padding: 40px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #555;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-logo {
+      color: white;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -2px;
+    }
+
+    @media (max-width: 800px) {
+      .nav {
+        padding: 0 5%;
+      }
+
+      .nav-links {
+        gap: 14px;
+      }
+
+      .nav-links a {
+        font-size: 9px;
+      }
+
+      .hero {
+        padding: 100px 5% 70px;
+      }
+
+      .title {
+        letter-spacing: -5px;
+      }
+
+      .catalogue {
+        padding: 70px 5% 90px;
+      }
+
+      .catalogue-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .search {
+        width: 100%;
+      }
+
+      .artists {
+        grid-template-columns: 1fr;
+      }
+
+      .artist {
+        min-height: 400px;
+      }
+
+      footer {
+        padding: 30px 5%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">NGS★</a>
+
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="artists.html">Artists</a>
+      <a href="index.html#vision">Vision</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <section class="hero">
+      <div class="eyebrow">NGS / Artist Catalogue</div>
+
+      <h1 class="title">
+        The<br>
+        <span>Artists.</span>
+      </h1>
+
+      <p class="intro">
+        Discover the artists building their names from the ground up.
+        No gatekeeping. No pay-to-play. Just talent.
+      </p>
+    </section>
+
+    <section class="catalogue">
+
+      <div class="catalogue-top">
+        <div class="catalogue-label">
+          01 / Discover
+        </div>
+
+        <input
+          type="text"
+          id="search"
+          class="search"
+          placeholder="Search artists..."
+          aria-label="Search artists"
+        >
+      </div>
+
+      <div id="artists" class="artists">
+        <div class="empty">
+          Loading artists...
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-logo">NGS★</div>
+    <div>© 2026 Next Gen Stars</div>
+    <div>London, UK</div>
+  </footer>
+
+  <script>
+    const supabaseClient = window.supabase.createClient(
+      window.NGS_CONFIG.url,
+      window.NGS_CONFIG.publishableKey
+    );
+
+    const artistsContainer = document.getElementById("artists");
+    const searchInput = document.getElementById("search");
+
+    let allArtists = [];
+
+    async function loadArtists() {
+      artistsContainer.innerHTML = `
+        <div class="empty">
+          Loading artists...
+        </div>
+      `;
+
+      const { data, error } = await supabaseClient
+        .from("artists")
+        .select("*")
+        .eq("published", true)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error(error);
+
+        artistsContainer.innerHTML = `
+          <div class="error">
+            Something went wrong loading the artists.
+          </div>
+        `;
+
+        return;
+      }
+
+      allArtists = data || [];
+      renderArtists(allArtists);
+    }
+
+    function renderArtists(artists) {
+      if (!artists.length) {
+        artistsContainer.innerHTML = `
+          <div class="empty">
+            No artists have been published yet.
+          </div>
+        `;
+
+        return;
+      }
+
+      artistsContainer.innerHTML = artists.map((artist, index) => {
+
+        const meta = [
+          artist.area,
+          artist.age ? `${artist.age} YEARS` : ""
+        ].filter(Boolean).join(" / ");
+
+        const image = artist.image_url
+          ? `<img src="${escapeHtml(artist.image_url)}" class="artist-image" alt="${escapeHtml(artist.name)}">`
+          : "";
+
+        return `
+          <a href="artist.html?id=${encodeURIComponent(artist.id)}" class="artist">
+
+            ${image}
+
+            <div class="artist-overlay"></div>
+
+            <div class="artist-number">
+              ${String(index + 1).padStart(3, "0")}
+            </div>
+
+            <div class="artist-content">
+
+              <div class="artist-name">
+                ${escapeHtml(artist.name)}
+              </div>
+
+              <div class="artist-meta">
+                ${escapeHtml(meta || "NGS ARTIST")}
+              </div>
+
+              <div class="artist-link">
+                View Artist →
+              </div>
+
+            </div>
+
+          </a>
+        `;
+      }).join("");
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase().trim();
+
+      const filtered = allArtists.filter(artist => {
+        return (
+          String(artist.name || "").toLowerCase().includes(query) ||
+          String(artist.area || "").toLowerCase().includes(query)
+        );
+      });
+
+      renderArtists(filtered);
+    });
+
+    loadArtists();
+  </script>
+
+</body>
+</html>
