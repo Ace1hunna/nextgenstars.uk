@@ -412,6 +412,67 @@
     }
 
     /* =========================
+       TALENT OVER MONEY
+    ========================= */
+
+    .principle {
+      min-height: 85vh;
+      padding: 140px 7%;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .principle-number {
+      color: #555;
+      font-size: 11px;
+      letter-spacing: 3px;
+      margin-bottom: 55px;
+    }
+
+    .principle-title {
+      font-size: clamp(65px, 12vw, 175px);
+      line-height: .78;
+      letter-spacing: -9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      max-width: 1200px;
+    }
+
+    .principle-title span {
+      display: block;
+    }
+
+    .principle-title .muted {
+      color: #555;
+    }
+
+    .principle-bottom {
+      margin-top: 75px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 60px;
+    }
+
+    .principle-statement {
+      max-width: 520px;
+      color: #999;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 19px;
+      line-height: 1.8;
+    }
+
+    .principle-mark {
+      font-size: 12px;
+      color: #555;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* =========================
        CONTACT
     ========================= */
 
@@ -578,6 +639,31 @@
         letter-spacing: -4px;
       }
 
+      .principle {
+        min-height: 75vh;
+        padding: 100px 5%;
+      }
+
+      .principle-number {
+        margin-bottom: 40px;
+      }
+
+      .principle-title {
+        letter-spacing: -5px;
+      }
+
+      .principle-bottom {
+        margin-top: 55px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 30px;
+      }
+
+      .principle-statement {
+        font-size: 17px;
+        line-height: 1.8;
+      }
+
       .contact {
         padding: 90px 5%;
       }
@@ -609,12 +695,12 @@
 
   <nav class="nav">
 
-    <a href="#top" class="nav-logo">
+    <a href="index.html" class="nav-logo">
       NGS★
     </a>
 
     <div class="nav-links">
-      <a href="#artists">Artists</a>
+      <a href="artists.html">Artists</a>
       <a href="#vision">Vision</a>
       <a href="#contact">Contact</a>
     </div>
@@ -650,7 +736,7 @@
           before anyone knows their name.
         </p>
 
-        <a href="#artists" class="hero-button">
+        <a href="artists.html" class="hero-button">
           Discover NGS →
         </a>
 
@@ -691,50 +777,25 @@
 
       </div>
 
-      <div class="artists">
+      <a href="artists.html" class="artist">
 
-        <a href="#" class="artist">
-          <div class="artist-number">001</div>
-          <div class="artist-symbol">01</div>
+        <div class="artist-number">
+          NGS / ARTIST CATALOGUE
+        </div>
 
-          <div class="artist-name">
-            Artist One
-          </div>
+        <div class="artist-symbol">
+          ★
+        </div>
 
-          <div class="artist-type">
-            Music / London
-          </div>
-        </a>
+        <div class="artist-name">
+          Discover The Artists.
+        </div>
 
+        <div class="artist-type">
+          View Artist Catalogue →
+        </div>
 
-        <a href="#" class="artist">
-          <div class="artist-number">002</div>
-          <div class="artist-symbol">02</div>
-
-          <div class="artist-name">
-            Artist Two
-          </div>
-
-          <div class="artist-type">
-            Music / London
-          </div>
-        </a>
-
-
-        <a href="#" class="artist">
-          <div class="artist-number">003</div>
-          <div class="artist-symbol">03</div>
-
-          <div class="artist-name">
-            Artist Three
-          </div>
-
-          <div class="artist-type">
-            Creative / London
-          </div>
-        </a>
-
-      </div>
+      </a>
 
     </section>
 
@@ -820,12 +881,46 @@
     </section>
 
 
+    <!-- TALENT OVER MONEY -->
+
+    <section class="principle">
+
+      <div class="principle-number">
+        04 / THE PRINCIPLE
+      </div>
+
+      <h2 class="principle-title">
+        <span>Talent</span>
+        <span class="muted">over</span>
+        <span>Money.</span>
+      </h2>
+
+      <div class="principle-bottom">
+
+        <p class="principle-statement">
+          If you've got the talent, you deserve the opportunity.
+
+          <br><br>
+
+          NGS exists to put talent first — not money, connections
+          or who already knows your name.
+        </p>
+
+        <div class="principle-mark">
+          No pay-to-play ★
+        </div>
+
+      </div>
+
+    </section>
+
+
     <!-- CONTACT -->
 
     <section class="contact" id="contact">
 
       <div class="section-number">
-        04 / CONTACT
+        05 / CONTACT
       </div>
 
       <h2 class="contact-title">
@@ -887,3 +982,4 @@
 
 </body>
 </html>
+      
