@@ -1,1 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Vision — NGS</title>
+  <meta
+    name="description"
+    content="The vision behind Next Generation Stars."
+  >
+
+  <style>
+    :root {
+      --black: #050505;
+      --white: #f5f5f5;
+      --grey: #8b8b8b;
+      --dark-grey: #555;
+      --line: #202020;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* =========================
+       NAV
+    ========================= */
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 75px;
+      padding: 0 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1000;
+
+      background: rgba(5, 5, 5, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+
+      border-bottom: 1px solid rgba(245, 245, 245, 0.08);
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      position: relative;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #aaa;
+      transition: color 0.25s ease;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -7px;
+      width: 0;
+      height: 1px;
+      background: var(--white);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--white);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* =========================
+       BACKGROUND
+    ========================= */
+
+    .ambient {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+
+      background:
+        radial-gradient(
+          circle at 20% 20%,
+          rgba(255,255,255,0.045),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 80% 70%,
+          rgba(255,255,255,0.025),
+          transparent 35%
+        );
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+      min-height: 100vh;
+      padding: 150px 7% 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 30px;
+
+      opacity: 0;
+      transform: translateY(25px);
+      animation: rise 0.8s ease forwards;
+    }
+
+    .hero h1 {
+      max-width: 1100px;
+      font-size: clamp(55px, 10vw, 150px);
+      line-height: 0.84;
+      letter-spacing: -0.075em;
+      font-weight: 900;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 span {
+      display: block;
+
+      opacity: 0;
+      transform: translateY(70px);
+      animation: rise 0.9s cubic-bezier(.16,1,.3,1) forwards;
+    }
+
+    .hero h1 span:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .hero h1 span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .hero h1 span:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .hero-copy {
+      max-width: 570px;
+      margin-top: 55px;
+      margin-left: 8px;
+
+      font-size: clamp(17px, 2vw, 23px);
+      line-height: 1.45;
+      color: #bdbdbd;
+
+      opacity: 0;
+      transform: translateY(30px);
+      animation: rise 0.9s ease forwards;
+      animation-delay: 0.55s;
+    }
+
+    .scroll-label {
+      position: absolute;
+      bottom: 35px;
+      left: 7%;
+
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #666;
+
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* Grey blocks */
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 55%;
+      height: 105px;
+      top: 38%;
+      left: 4%;
+
+      background: #151515;
+      transform: rotate(-2deg);
+      z-index: 1;
+
+      opacity: 0;
+      animation: blockReveal 1s ease forwards;
+      animation-delay: 0.25s;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 42%;
+      height: 90px;
+      top: 53%;
+      right: 3%;
+
+      background: #101010;
+      transform: rotate(2deg);
+      z-index: 1;
+
+      opacity: 0;
+      animation: blockReveal 1s ease forwards;
+      animation-delay: 0.4s;
+    }
+
+    /* =========================
+       GENERAL SECTIONS
+    ========================= */
+
+    section {
+      position: relative;
+      padding: 150px 7%;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-number {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--grey);
+      margin-bottom: 35px;
+    }
+
+    .section-title {
+      font-size: clamp(55px, 9vw, 130px);
+      line-height: 0.86;
+      letter-spacing: -0.07em;
+      font-weight: 900;
+      text-transform: uppercase;
+      max-width: 1100px;
+    }
+
+    .section-text {
+      max-width: 650px;
+      margin-top: 55px;
+
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.5;
+      color: #aaa;
+    }
+
+    /* =========================
+       REVEAL
+    ========================= */
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(70px);
+      transition:
+        opacity 0.9s cubic-bezier(.16,1,.3,1),
+        transform 0.9s cubic-bezier(.16,1,.3,1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .delay-1 {
+      transition-delay: 0.1s;
+    }
+
+    .delay-2 {
+      transition-delay: 0.2s;
+    }
+
+    .delay-3 {
+      transition-delay: 0.3s;
+    }
+
+    /* =========================
+       BIG BACKGROUND WORDS
+    ========================= */
+
+    .background-word {
+      position: absolute;
+      font-size: clamp(100px, 22vw, 360px);
+      line-height: 0.8;
+      font-weight: 900;
+      letter-spacing: -0.09em;
+      color: rgba(255,255,255,0.025);
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+      z-index: 0;
+    }
+
+    .early-word {
+      top: 100px;
+      right: -80px;
+    }
+
+    .talent-word {
+      bottom: 50px;
+      left: -80px;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* =========================
+       IDEA SECTION
+    ========================= */
+
+    .idea-grid {
+      margin-top: 100px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .idea-number {
+      font-size: 80px;
+      font-weight: 900;
+      letter-spacing: -0.08em;
+      color: #222;
+    }
+
+    .idea-heading {
+      font-size: clamp(35px, 5vw, 70px);
+      line-height: 0.95;
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      text-transform: uppercase;
+    }
+
+    .idea-copy {
+      margin-top: 30px;
+      max-width: 570px;
+
+      font-size: 19px;
+      line-height: 1.6;
+      color: #999;
+    }
+
+    /* =========================
+       TALENT OVER MONEY
+    ========================= */
+
+    .statement {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .statement-title {
+      max-width: 1200px;
+      font-size: clamp(65px, 11vw, 170px);
+      line-height: 0.82;
+      font-weight: 900;
+      letter-spacing: -0.085em;
+      text-transform: uppercase;
+    }
+
+    .statement-title .outline {
+      color: transparent;
+      -webkit-text-stroke: 1px #777;
+    }
+
+    /* =========================
+       FUTURE
+    ========================= */
+
+    .future-list {
+      margin-top: 100px;
+      border-top: 1px solid var(--line);
+    }
+
+    .future-item {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 40px;
+
+      padding: 45px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .future-item-number {
+      font-size: 13px;
+      font-weight: 800;
+      color: #666;
+    }
+
+    .future-item h3 {
+      font-size: clamp(30px, 4vw, 55px);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .future-item p {
+      max-width: 600px;
+      font-size: 18px;
+      line-height: 1.55;
+      color: #888;
+    }
+
+    /* =========================
+       FINAL
+    ========================= */
+
+    .final {
+      min-height: 85vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .final h2 {
+      max-width: 1200px;
+      font-size: clamp(60px, 11vw, 170px);
+      line-height: 0.82;
+      letter-spacing: -0.08em;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .final h2 span {
+      display: block;
+    }
+
+    .final h2 .grey {
+      color: #555;
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      padding: 35px 7%;
+      border-top: 1px solid var(--line);
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      color: #555;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    footer strong {
+      color: var(--white);
+      font-size: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    /* =========================
+       ANIMATIONS
+    ========================= */
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes blockReveal {
+      from {
+        opacity: 0;
+        transform: translateY(25px) rotate(-2deg);
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 0.35;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 700px) {
+
+      nav {
+        height: 68px;
+        padding: 0 6%;
+      }
+
+      .logo {
+        font-size: 18px;
+      }
+
+      .nav-links {
+        gap: 15px;
+      }
+
+      .nav-links a {
+        font-size: 10px;
+      }
+
+      .nav-links a:nth-child(3) {
+        display: none;
+      }
+
+      .hero {
+        min-height: 100svh;
+        padding: 120px 6% 80px;
+      }
+
+      .hero h1 {
+        font-size: clamp(55px, 18vw, 100px);
+        line-height: 0.87;
+      }
+
+      .hero-copy {
+        margin-top: 40px;
+        margin-left: 0;
+        font-size: 17px;
+        line-height: 1.5;
+        max-width: 95%;
+      }
+
+      .hero::before {
+        width: 90%;
+        height: 75px;
+        top: 37%;
+        left: 2%;
+      }
+
+      .hero::after {
+        width: 75%;
+        height: 65px;
+        top: 51%;
+        right: -10%;
+      }
+
+      section {
+        padding: 100px 6%;
+      }
+
+      .section-title {
+        font-size: clamp(55px, 17vw, 100px);
+      }
+
+      .section-text {
+        margin-top: 40px;
+        font-size: 18px;
+      }
+
+      .idea-grid {
+        grid-template-columns: 1fr;
+        gap: 35px;
+        margin-top: 70px;
+      }
+
+      .idea-number {
+        font-size: 55px;
+      }
+
+      .idea-copy {
+        font-size: 17px;
+      }
+
+      .statement {
+        min-height: 80vh;
+      }
+
+      .statement-title {
+        font-size: clamp(60px, 18vw, 110px);
+      }
+
+      .future-list {
+        margin-top: 65px;
+      }
+
+      .future-item {
+        grid-template-columns: 45px 1fr;
+        gap: 15px;
+        padding: 35px 0;
+      }
+
+      .future-item h3 {
+        font-size: 30px;
+      }
+
+      .future-item p {
+        font-size: 16px;
+      }
+
+      .final {
+        min-height: 75vh;
+      }
+
+      .final h2 {
+        font-size: clamp(55px, 17vw, 105px);
+      }
+
+      footer {
+        padding: 30px 6%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="ambient"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo">NGS★</a>
+
+    <div class="nav-links">
+      <a href="artists.html">Artists</a>
+      <a href="freestyles.html">Freestyles</a>
+      <a href="vision.html">Vision</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </nav>
+
+
+  <!-- HERO -->
+  <header class="hero">
+
+    <div class="eyebrow">
+      03 / Our Vision
+    </div>
+
+    <h1>
+      <span>We Don't</span>
+      <span>Follow The</span>
+      <span>Next Wave.</span>
+    </h1>
+
+    <p class="hero-copy">
+      We create it. NGS exists to find the artists, creators and personalities
+      who are going to shape what comes next — before everybody else catches on.
+    </p>
+
+    <div class="scroll-label">
+      Scroll to explore ↓
+    </div>
+
+  </header>
+
+
+  <!-- THE IDEA -->
+  <section>
+
+    <div class="background-word early-word">
+      EARLY
+    </div>
+
+    <div class="content">
+
+      <div class="section-number reveal">
+        01 / THE IDEA
+      </div>
+
+      <h2 class="section-title reveal delay-1">
+        Find Them<br>
+        Early.
+      </h2>
+
+      <div class="idea-grid">
+
+        <div class="idea-number reveal delay-1">
+          01
+        </div>
+
+        <div class="reveal delay-2">
+
+          <h3 class="idea-heading">
+            Talent shouldn't<br>
+            need permission.
+          </h3>
+
+          <p class="idea-copy">
+            Too many artists only get recognised once somebody else has
+            already decided they're worth listening to.
+          </p>
+
+          <p class="idea-copy">
+            NGS wants to change that. We want to discover people while
+            they're still building, still experimenting and still finding
+            their sound.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- TALENT OVER MONEY -->
+  <section class="statement">
+
+    <div class="background-word talent-word">
+      TALENT
+    </div>
+
+    <div class="content">
+
+      <div class="section-number reveal">
+        02 / THE PRINCIPLE
+      </div>
+
+      <h2 class="statement-title reveal delay-1">
+        Talent
+        <span class="outline">Over</span>
+        Money.
+      </h2>
+
+      <p class="section-text reveal delay-2">
+        NGS isn't about who has the biggest budget, the most connections
+        or the biggest following. The music comes first. The person comes
+        first. The potential comes first.
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- BUILD SOMETHING REAL -->
+  <section>
+
+    <div class="content">
+
+      <div class="section-number reveal">
+        03 / THE FUTURE
+      </div>
+
+      <h2 class="section-title reveal delay-1">
+        Build<br>
+        Something<br>
+        Real.
+      </h2>
+
+      <div class="future-list">
+
+        <div class="future-item reveal">
+
+          <div class="future-item-number">
+            01
+          </div>
+
+          <div>
+            <h3>Discover</h3>
+
+            <p>
+              Give unknown artists somewhere to be found.
+              Not after they've blown — while they're still becoming.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="future-item reveal delay-1">
+
+          <div class="future-item-number">
+            02
+          </div>
+
+          <div>
+            <h3>Showcase</h3>
+
+            <p>
+              Create a platform where artists can build an identity,
+              show their personality and let the music speak.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="future-item reveal delay-2">
+
+          <div class="future-item-number">
+            03
+          </div>
+
+          <div>
+            <h3>Connect</h3>
+
+            <p>
+              Bring artists and listeners together and create a community
+              around the next generation of talent.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="future-item reveal delay-3">
+
+          <div class="future-item-number">
+            04
+          </div>
+
+          <div>
+            <h3>Grow</h3>
+
+            <p>
+              NGS isn't supposed to be the destination.
+              It's supposed to be where the journey starts.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- FINAL STATEMENT -->
+  <section class="final">
+
+    <h2 class="reveal">
+      <span>The Next</span>
+      <span class="grey">Generation</span>
+      <span>Starts Here.</span>
+    </h2>
+
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer>
+
+    <strong>NGS★</strong>
+
+    <span>
+      © 2026 Next Generation Stars
+    </span>
+
+    <span>
+      London, UK
+    </span>
+
+  </footer>
+
+
+  <script>
+    /* =========================
+       SCROLL REVEAL
+    ========================= */
+
+    const revealElements =
+      document.querySelectorAll(".reveal");
+
+    const revealObserver =
+      new IntersectionObserver(
+        (entries) => {
+
+          entries.forEach((entry) => {
+
+            if (entry.isIntersecting) {
+
+              entry.target.classList.add("visible");
+
+              revealObserver.unobserve(entry.target);
+
+            }
+
+          });
+
+        },
+        {
+          threshold: 0.12
+        }
+      );
+
+    revealElements.forEach((element) => {
+      revealObserver.observe(element);
+    });
+
+
+    /* =========================
+       BACKGROUND PARALLAX
+    ========================= */
+
+    const earlyWord =
+      document.querySelector(".early-word");
+
+    const talentWord =
+      document.querySelector(".talent-word");
+
+    window.addEventListener(
+      "scroll",
+      () => {
+
+        const scrollY = window.scrollY;
+
+        if (earlyWord) {
+          earlyWord.style.transform =
+            `translateY(${scrollY * 0.08}px)`;
+        }
+
+        if (talentWord) {
+          talentWord.style.transform =
+            `translateY(${-scrollY * 0.05}px)`;
+        }
+
+      },
+      { passive: true }
+    );
+  </script>
+
+</body>
+</html>
