@@ -4,24 +4,40 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Our Vision — NGS</title>
+  <title>Next Gen Stars — NGS</title>
+
+  <meta
+    name="description"
+    content="Next Gen Stars — a platform for the next generation of artists, creators and stars."
+  >
 
   <style>
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+    :root {
+      --black: #050505;
+      --white: #f5f5f5;
+      --grey: #8b8b8b;
+      --dark-grey: #555;
+      --line: #202020;
+      --card: #090909;
+    }
+
     html {
       scroll-behavior: smooth;
+      scroll-padding-top: 75px;
     }
 
     body {
-      background: #000;
-      color: #fff;
+      background: var(--black);
+      color: var(--white);
       font-family: Arial, Helvetica, sans-serif;
-      line-height: 1.5;
+      overflow-x: hidden;
     }
 
     a {
@@ -29,286 +45,1386 @@
       text-decoration: none;
     }
 
-    /* NAV */
-    nav {
-      height: 80px;
-      padding: 0 5vw;
+
+    /* =========================
+       NAV
+    ========================= */
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+
+      height: 75px;
+      padding: 0 7%;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid #222;
+
+      background: rgba(5, 5, 5, 0.92);
+      backdrop-filter: blur(14px);
+
+      border-bottom: 1px solid var(--line);
     }
 
-    .logo {
-      font-size: 22px;
+    .nav-logo {
+      font-size: 24px;
       font-weight: 900;
-      letter-spacing: -1px;
+      letter-spacing: -2px;
     }
 
     .nav-links {
       display: flex;
-      gap: 30px;
-      font-size: 14px;
-      font-weight: 700;
+      gap: 28px;
     }
 
     .nav-links a {
-      transition: opacity 0.2s ease;
+      color: #aaa;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: 0.2s ease;
     }
 
     .nav-links a:hover {
-      opacity: 0.5;
+      color: white;
     }
 
-    /* HERO */
+
+    /* =========================
+       HERO
+    ========================= */
+
     .hero {
-      min-height: 75vh;
-      padding: 10vh 5vw 8vh;
+      min-height: 90vh;
+
+      padding: 11vw 7%;
+
       display: flex;
       flex-direction: column;
       justify-content: center;
-      border-bottom: 1px solid #222;
+
+      position: relative;
+
+      border-bottom: 1px solid var(--line);
+
+      overflow: hidden;
     }
 
     .eyebrow {
-      font-size: 13px;
+      color: #666;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: 2px;
-      margin-bottom: 30px;
-      color: #aaa;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+
+      margin-bottom: 35px;
     }
 
-    .hero h1 {
-      font-size: clamp(58px, 10vw, 150px);
-      line-height: 0.85;
-      letter-spacing: -7px;
+    .hero-title {
+      position: relative;
+      z-index: 2;
+
+      font-size: clamp(65px, 12vw, 180px);
+      line-height: 0.8;
+      letter-spacing: -9px;
       font-weight: 900;
+
+      text-transform: uppercase;
+
       max-width: 1200px;
     }
 
-    /* CONTENT */
-    .section {
-      padding: 12vh 5vw;
-      border-bottom: 1px solid #222;
+    .hero-title span {
+      display: block;
     }
 
-    .section-label {
-      font-size: 13px;
+    /*
+      Grey blocks behind the hero title
+    */
+
+    .hero::before,
+    .hero::after {
+      content: "";
+
+      position: absolute;
+
+      background: #151515;
+
+      z-index: 0;
+
+      pointer-events: none;
+    }
+
+    .hero::before {
+      width: 55%;
+      height: 105px;
+
+      top: 37%;
+      left: 5%;
+
+      transform: rotate(-2deg);
+    }
+
+    .hero::after {
+      width: 42%;
+      height: 90px;
+
+      top: 51%;
+      right: 4%;
+
+      transform: rotate(2deg);
+    }
+
+    .hero-bottom {
+      position: relative;
+      z-index: 3;
+
+      margin-top: 70px;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+
+      gap: 50px;
+    }
+
+    .hero-copy {
+      max-width: 520px;
+
+      color: #999;
+
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    .hero-button {
+      border: 1px solid #555;
+
+      padding: 17px 27px;
+
+      font-size: 11px;
       font-weight: 700;
       letter-spacing: 2px;
-      color: #aaa;
-      margin-bottom: 60px;
+
+      text-transform: uppercase;
+
+      transition: 0.25s ease;
+
+      white-space: nowrap;
+    }
+
+    .hero-button:hover {
+      background: white;
+      color: black;
+      border-color: white;
+    }
+
+
+    /* =========================
+       MARQUEE
+    ========================= */
+
+    .marquee {
+      overflow: hidden;
+
+      border-bottom: 1px solid var(--line);
+
+      padding: 25px 0;
+
+      white-space: nowrap;
+    }
+
+    .marquee-track {
+      display: inline-block;
+
+      animation: marquee 20s linear infinite;
+
+      font-size: clamp(30px, 5vw, 70px);
+
+      font-weight: 900;
+      letter-spacing: -3px;
+
+      text-transform: uppercase;
+    }
+
+    .marquee-track span {
+      margin-right: 60px;
+    }
+
+    @keyframes marquee {
+
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+
+    }
+
+
+    /* =========================
+       GENERAL SECTION
+    ========================= */
+
+    .section {
+      padding: 120px 7%;
+
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: flex;
+
+      justify-content: space-between;
+      align-items: flex-end;
+
+      margin-bottom: 70px;
+    }
+
+    .section-number {
+      color: #555;
+
+      font-size: 11px;
+      font-weight: 700;
+
+      letter-spacing: 3px;
+
+      text-transform: uppercase;
     }
 
     .section-title {
-      font-size: clamp(52px, 8vw, 120px);
-      line-height: 0.9;
+      font-size: clamp(45px, 7vw, 100px);
+
+      line-height: 0.85;
+
       letter-spacing: -5px;
+
       font-weight: 900;
-      margin-bottom: 50px;
+
+      text-transform: uppercase;
     }
 
-    .section-text {
-      max-width: 700px;
-      font-size: clamp(20px, 2.3vw, 30px);
-      line-height: 1.35;
-      color: #ddd;
-    }
 
-    /* CLOSING */
-    .closing {
-      min-height: 70vh;
-      padding: 12vh 5vw;
+    /* =========================
+       ARTISTS
+    ========================= */
+
+    .artist {
+      min-height: 430px;
+
+      background: var(--card);
+
+      padding: 30px;
+
+      position: relative;
+
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-end;
+
+      overflow: hidden;
+
+      border: 1px solid #111;
+
+      transition: 0.4s ease;
     }
 
-    .closing h2 {
-      font-size: clamp(48px, 8vw, 120px);
-      line-height: 0.9;
-      letter-spacing: -5px;
+    .artist:hover {
+      background: #111;
+      border-color: #292929;
+    }
+
+    .artist-number {
+      position: absolute;
+
+      top: 25px;
+      right: 25px;
+
+      color: #555;
+
+      font-size: 11px;
+      letter-spacing: 2px;
+
+      text-transform: uppercase;
+    }
+
+    .artist-symbol {
+      position: absolute;
+
+      top: 50%;
+      left: 50%;
+
+      transform: translate(-50%, -55%);
+
+      font-size: 150px;
+
       font-weight: 900;
-      max-width: 1100px;
+
+      color: #111;
+
+      transition: 0.4s ease;
     }
 
-    .back {
-      display: inline-block;
-      margin-top: 60px;
-      padding: 17px 25px;
-      border: 1px solid #fff;
-      font-size: 14px;
-      font-weight: 700;
-      width: fit-content;
-      transition: all 0.2s ease;
+    .artist:hover .artist-symbol {
+      transform: translate(-50%, -55%) scale(1.15);
+
+      color: #181818;
     }
 
-    .back:hover {
-      background: #fff;
-      color: #000;
+    .artist-name {
+      position: relative;
+      z-index: 2;
+
+      font-size: 42px;
+
+      font-weight: 900;
+
+      letter-spacing: -2px;
+
+      text-transform: uppercase;
     }
 
-    /* FOOTER */
-    footer {
-      padding: 35px 5vw;
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      flex-wrap: wrap;
-      border-top: 1px solid #222;
-      font-size: 12px;
+    .artist-type {
+      position: relative;
+      z-index: 2;
+
+      margin-top: 8px;
+
       color: #777;
+
+      font-size: 11px;
+      font-weight: 700;
+
+      letter-spacing: 3px;
+
+      text-transform: uppercase;
     }
 
-    footer strong {
-      color: #fff;
+
+    /* =========================
+       FREESTYLES
+    ========================= */
+
+    .freestyles {
+      padding: 120px 7%;
+
+      border-bottom: 1px solid var(--line);
     }
 
-    /* MOBILE */
-    @media (max-width: 700px) {
-      nav {
-        height: 70px;
-        padding: 0 20px;
+    .freestyle-top {
+      display: flex;
+
+      justify-content: space-between;
+      align-items: flex-end;
+
+      gap: 60px;
+
+      margin-bottom: 60px;
+    }
+
+    .freestyle-number {
+      color: #555;
+
+      font-size: 11px;
+      font-weight: 700;
+
+      letter-spacing: 3px;
+
+      margin-bottom: 25px;
+
+      text-transform: uppercase;
+    }
+
+    .freestyle-title {
+      font-size: clamp(55px, 9vw, 130px);
+
+      line-height: 0.82;
+
+      letter-spacing: -7px;
+
+      font-weight: 900;
+
+      text-transform: uppercase;
+    }
+
+    .freestyle-intro {
+      max-width: 390px;
+
+      color: #999;
+
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .freestyle-list {
+      border-top: 1px solid #222;
+    }
+
+    .freestyle-row {
+      display: grid;
+
+      grid-template-columns: 60px 1fr 180px 80px;
+
+      align-items: center;
+
+      gap: 20px;
+
+      min-height: 92px;
+
+      border-bottom: 1px solid #1d1d1d;
+
+      transition: 0.25s ease;
+    }
+
+    .freestyle-row:hover {
+      background: #0b0b0b;
+      padding-left: 10px;
+    }
+
+    .freestyle-play {
+      width: 42px;
+      height: 42px;
+
+      border: 1px solid #444;
+
+      background: transparent;
+
+      color: white;
+
+      border-radius: 50%;
+
+      cursor: pointer;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 12px;
+
+      transition: 0.25s ease;
+    }
+
+    .freestyle-play:hover {
+      background: white;
+      color: black;
+      border-color: white;
+    }
+
+    .freestyle-main {
+      min-width: 0;
+    }
+
+    .freestyle-track-title {
+      font-size: 18px;
+      font-weight: 800;
+
+      letter-spacing: -0.4px;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .freestyle-artist {
+      display: inline-block;
+
+      margin-top: 5px;
+
+      color: #666;
+
+      font-size: 11px;
+      font-weight: 700;
+
+      letter-spacing: 2px;
+
+      text-transform: uppercase;
+
+      transition: 0.2s ease;
+    }
+
+    .freestyle-artist:hover {
+      color: white;
+    }
+
+    .freestyle-progress {
+      height: 2px;
+
+      background: #222;
+
+      position: relative;
+
+      cursor: pointer;
+    }
+
+    .freestyle-progress-fill {
+      position: absolute;
+
+      left: 0;
+      top: 0;
+
+      width: 0%;
+      height: 100%;
+
+      background: white;
+    }
+
+    .freestyle-time {
+      color: #666;
+
+      font-size: 11px;
+
+      text-align: right;
+
+      white-space: nowrap;
+    }
+
+    .freestyle-empty {
+      padding: 50px 0;
+
+      color: #555;
+
+      font-size: 12px;
+      font-weight: 700;
+
+      letter-spacing: 2px;
+
+      text-transform: uppercase;
+    }
+
+    .freestyle-bottom {
+      display: flex;
+
+      justify-content: space-between;
+      align-items: center;
+
+      gap: 30px;
+
+      margin-top: 40px;
+    }
+
+    .freestyle-count {
+      color: #555;
+
+      font-size: 11px;
+      font-weight: 700;
+
+      letter-spacing: 2px;
+
+      text-transform: uppercase;
+    }
+
+    .freestyle-button {
+      border: 1px solid #555;
+
+      padding: 16px 24px;
+
+      font-size: 11px;
+      font-weight: 700;
+
+      letter-spacing: 2px;
+
+      text-transform: uppercase;
+
+      transition: 0.25s ease;
+    }
+
+    .freestyle-button:hover {
+      background: white;
+      color: black;
+
+      border-color: white;
+    }
+
+
+    /* =========================
+       BEFORE THEY BLOW
+    ========================= */
+
+    .feature {
+      padding: 140px 7%;
+
+      border-bottom: 1px solid var(--line);
+    }
+
+    .feature-grid {
+      display: grid;
+
+      grid-template-columns: 1.3fr 0.7fr;
+
+      gap: 80px;
+
+      align-items: end;
+    }
+
+    .feature-number {
+      color: #555;
+
+      font-size: 11px;
+      font-weight: 700;
+
+      letter-spacing: 3px;
+
+      margin-bottom: 25px;
+
+      text-transform: uppercase;
+    }
+
+    .feature-title {
+      font-size: clamp(55px, 9vw, 130px);
+
+      line-height: 0.82;
+
+      letter-spacing: -7px;
+
+      font-weight: 900;
+
+      text-transform: uppercase;
+    }
+
+    .feature-text {
+      max-width: 450px;
+
+      color: #aaa;
+
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+      line-height: 1.8;
+
+      font-size: 20px;
+    }
+
+
+    /* =========================
+       VISUAL
+    ========================= */
+
+    .video-section {
+      padding: 0 7% 120px;
+
+      border-bottom: 1px solid var(--line);
+    }
+
+    .video-box {
+      height: 65vh;
+
+      min-height: 420px;
+
+      background:
+        radial-gradient(
+          circle at 50% 50%,
+          #222 0%,
+          #0b0b0b 35%,
+          #050505 70%
+        );
+
+      border: 1px solid var(--line);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      position: relative;
+
+      overflow: hidden;
+    }
+
+    .video-box::before {
+      content: "NGS";
+
+      position: absolute;
+
+      font-size: 25vw;
+
+      font-weight: 900;
+
+      letter-spacing: -20px;
+
+      color: rgba(255,255,255,0.015);
+
+      white-space: nowrap;
+    }
+
+    .play {
+      width: 95px;
+      height: 95px;
+
+      border: 1px solid #666;
+
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 25px;
+
+      padding-left: 5px;
+
+      transition: 0.3s ease;
+
+      position: relative;
+      z-index: 2;
+    }
+
+    .video-box:hover .play {
+      background: white;
+
+      color: black;
+
+      border-color: white;
+
+      transform: scale(1.08);
+    }
+
+    .video-label {
+      position: absolute;
+
+      left: 30px;
+      bottom: 25px;
+
+      color: #777;
+
+      font-size: 11px;
+      font-weight: 700;
+
+      letter-spacing: 3px;
+
+      text-transform: uppercase;
+    }
+
+
+    /* =========================
+       CONTACT
+    ========================= */
+
+    .contact {
+      padding: 130px 7%;
+
+      border-bottom: 1px solid var(--line);
+    }
+
+    .contact-title {
+      font-size: clamp(50px, 9vw, 140px);
+
+      font-weight: 900;
+
+      letter-spacing: -8px;
+
+      line-height: 0.8;
+
+      text-transform: uppercase;
+    }
+
+    .contact-link {
+      display: inline-block;
+
+      margin-top: 55px;
+
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+      font-size: 18px;
+
+      border-bottom: 1px solid #777;
+
+      padding-bottom: 8px;
+
+      transition: 0.2s ease;
+    }
+
+    .contact-link:hover {
+      border-color: white;
+    }
+
+    .social-links {
+      display: flex;
+
+      gap: 15px;
+
+      margin-top: 35px;
+
+      flex-wrap: wrap;
+    }
+
+    .social-link {
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      min-width: 230px;
+
+      padding: 16px 24px;
+
+      border: 1px solid #444;
+
+      color: #aaa;
+
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+      font-size: 14px;
+      font-weight: 500;
+
+      letter-spacing: 1px;
+
+      transition: 0.25s ease;
+    }
+
+    .social-link:hover {
+      color: white;
+
+      border-color: white;
+
+      background: #111;
+    }
+
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      padding: 40px 7%;
+
+      display: flex;
+
+      justify-content: space-between;
+      align-items: center;
+
+      color: #555;
+
+      font-size: 10px;
+
+      letter-spacing: 2px;
+
+      text-transform: uppercase;
+    }
+
+    .footer-logo {
+      color: white;
+
+      font-size: 20px;
+
+      font-weight: 900;
+
+      letter-spacing: -2px;
+    }
+
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 800px) {
+
+      .nav {
+        padding: 0 5%;
       }
 
       .nav-links {
         gap: 14px;
-        font-size: 11px;
+      }
+
+      .nav-links a {
+        font-size: 9px;
+        letter-spacing: 1px;
       }
 
       .hero {
-        padding: 8vh 20px;
-        min-height: 70vh;
+        min-height: calc(100vh - 70px);
+
+        padding: 80px 5%;
       }
 
-      .hero h1 {
-        letter-spacing: -4px;
+      .hero-title {
+        letter-spacing: -5px;
       }
 
-      .section,
-      .closing {
-        padding: 10vh 20px;
+      .hero::before {
+        width: 80%;
+        height: 70px;
+
+        top: 39%;
+        left: 0;
       }
 
-      .section-label {
-        margin-bottom: 40px;
+      .hero::after {
+        width: 70%;
+        height: 65px;
+
+        top: 51%;
+        right: 0;
       }
 
-      .section-title,
-      .closing h2 {
+      .hero-bottom {
+        margin-top: 50px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 30px;
+      }
+
+      .hero-copy {
+        font-size: 17px;
+      }
+
+      .section {
+        padding: 90px 5%;
+      }
+
+      .section-head {
+        margin-bottom: 45px;
+      }
+
+      .section-title {
         letter-spacing: -3px;
       }
 
-      .section-text {
-        font-size: 19px;
+      .artist {
+        min-height: 350px;
+
+        padding: 25px;
       }
 
-      footer {
-        padding: 30px 20px;
+      .artist-name {
+        font-size: 34px;
       }
+
+
+      /* FREESTYLES */
+
+      .freestyles {
+        padding: 90px 5%;
+      }
+
+      .freestyle-top {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 35px;
+      }
+
+      .freestyle-title {
+        letter-spacing: -4px;
+      }
+
+      .freestyle-intro {
+        font-size: 17px;
+      }
+
+      .freestyle-row {
+        grid-template-columns: 48px 1fr 60px;
+
+        gap: 14px;
+
+        min-height: 82px;
+      }
+
+      .freestyle-progress {
+        display: none;
+      }
+
+      .freestyle-time {
+        font-size: 10px;
+      }
+
+      .freestyle-track-title {
+        font-size: 16px;
+      }
+
+      .freestyle-bottom {
+        flex-direction: column;
+
+        align-items: flex-start;
+      }
+
+
+      /* FEATURE */
+
+      .feature {
+        padding: 90px 5%;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+
+        gap: 50px;
+      }
+
+      .feature-title {
+        letter-spacing: -4px;
+      }
+
+      .feature-text {
+        font-size: 18px;
+
+        line-height: 1.8;
+      }
+
+
+      /* VISUAL */
+
+      .video-section {
+        padding: 0 5% 90px;
+      }
+
+      .video-box {
+        height: 50vh;
+      }
+
+      .play {
+        width: 68px;
+        height: 68px;
+      }
+
+
+      /* CONTACT */
+
+      .contact {
+        padding: 90px 5%;
+      }
+
+      .contact-title {
+        letter-spacing: -5px;
+      }
+
+      .social-links {
+        gap: 12px;
+
+        flex-direction: column;
+      }
+
+      .social-link {
+        width: 100%;
+
+        font-size: 14px;
+      }
+
+
+      footer {
+        padding: 30px 5%;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 8px;
+      }
+
     }
+
   </style>
 </head>
 
+
 <body>
 
+
   <!-- NAV -->
-  <nav>
-    <a href="index.html" class="logo">NGS★</a>
+
+  <nav class="nav">
+
+    <a href="index.html" class="nav-logo">
+      NGS★
+    </a>
 
     <div class="nav-links">
-      <a href="artists.html">Artists</a>
-      <a href="freestyles.html">Freestyles</a>
-      <a href="vision.html">Vision</a>
-      <a href="index.html#contact">Contact</a>
+
+      <a href="artists.html">
+        Artists
+      </a>
+
+      <a href="freestyles.html">
+        Freestyles
+      </a>
+
+      <a href="vision.html">
+        Vision
+      </a>
+
+      <a href="#contact">
+        Contact
+      </a>
+
     </div>
+
   </nav>
 
 
-  <!-- HERO -->
-  <section class="hero">
+  <main>
 
-    <div class="eyebrow">
-      03 / OUR VISION
+
+    <!-- HERO -->
+
+    <section class="hero" id="top">
+
+      <div class="eyebrow">
+        The next generation starts here
+      </div>
+
+      <h1 class="hero-title">
+        <span>Next</span>
+        <span>Gen</span>
+        <span>Stars</span>
+      </h1>
+
+      <div class="hero-bottom">
+
+        <p class="hero-copy">
+          NGS is a platform built around the artists, creators and
+          personalities shaping the UK music scene.
+          <br><br>
+          Discover new talent, watch them grow, and be there before
+          anyone knows their name.
+        </p>
+
+        <a href="artists.html" class="hero-button">
+          Discover NGS →
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- MARQUEE -->
+
+    <div class="marquee" aria-hidden="true">
+
+      <div class="marquee-track">
+
+        <span>NEW TALENT ★</span>
+        <span>NEXT GENERATION ★</span>
+        <span>NGS ★</span>
+
+        <span>NEW TALENT ★</span>
+        <span>NEXT GENERATION ★</span>
+        <span>NGS ★</span>
+
+      </div>
+
     </div>
 
-    <h1>
-      We don't follow<br>
-      the next wave.<br>
-      We create it.
-    </h1>
 
-  </section>
+    <!-- ARTISTS -->
 
+    <section class="section" id="artists">
 
-  <!-- THE IDEA -->
-  <section class="section">
+      <div class="section-head">
 
-    <div class="section-label">
-      THE IDEA
-    </div>
+        <div class="section-number">
+          01 / DISCOVER
+        </div>
 
-    <h2 class="section-title">
-      Find them early.
-    </h2>
+        <h2 class="section-title">
+          Artists
+        </h2>
 
-    <p class="section-text">
-      The biggest artists in the world all started somewhere.
-      Before the numbers, before the recognition, before everyone
-      knew their name.
-      <br><br>
-      NGS exists to find those artists while they're still building.
-      To give upcoming talent a place to be discovered, heard and
-      remembered before the world catches up.
-    </p>
-
-  </section>
+      </div>
 
 
-  <!-- THE PRINCIPLE -->
-  <section class="section">
+      <a href="artists.html" class="artist">
 
-    <div class="section-label">
-      THE PRINCIPLE
-    </div>
+        <div class="artist-number">
+          NGS / ARTIST CATALOGUE
+        </div>
 
-    <h2 class="section-title">
-      Talent over Money.
-    </h2>
+        <div class="artist-symbol">
+          ★
+        </div>
 
-    <p class="section-text">
-      NGS isn't about who has the biggest budget, the biggest
-      following or the right connections.
-      <br><br>
-      It's about talent.
-      <br><br>
-      A platform where potential matters more than popularity,
-      and where the next generation gets the opportunity to build
-      something real.
-    </p>
+        <div class="artist-name">
+          Discover The Artists.
+        </div>
 
-  </section>
+        <div class="artist-type">
+          View Artist Catalogue →
+        </div>
+
+      </a>
+
+    </section>
 
 
-  <!-- CLOSING -->
-  <section class="closing">
+    <!-- FREESTYLES -->
 
-    <h2>
-      The next generation deserves a place to start.
-    </h2>
+    <section class="freestyles" id="freestyles">
 
-    <a href="index.html" class="back">
-      ← Back to NGS
-    </a>
+      <div class="freestyle-top">
 
-  </section>
+        <div>
+
+          <div class="freestyle-number">
+            02 / LISTEN
+          </div>
+
+          <h2 class="freestyle-title">
+            Freestyles
+          </h2>
+
+        </div>
+
+        <p class="freestyle-intro">
+          Every sound. Every style.
+          Listen to the latest freestyles
+          from the next generation.
+        </p>
+
+      </div>
+
+
+      <div id="freestyleList" class="freestyle-list">
+
+        <div class="freestyle-empty">
+          Loading freestyles...
+        </div>
+
+      </div>
+
+
+      <div class="freestyle-bottom">
+
+        <div id="freestyleCount" class="freestyle-count">
+          Loading
+        </div>
+
+        <a
+          href="freestyles.html"
+          class="freestyle-button"
+        >
+          Explore All Freestyles →
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- BEFORE THEY BLOW -->
+
+    <section class="feature">
+
+      <div class="feature-grid">
+
+        <div>
+
+          <div class="feature-number">
+            03 / THE PLATFORM
+          </div>
+
+          <h2 class="feature-title">
+            Before<br>
+            They<br>
+            Blow.
+          </h2>
+
+        </div>
+
+
+        <p class="feature-text">
+
+          Every generation has its stars.
+
+          <br><br>
+
+          NGS exists to find them early —
+          giving upcoming talent a place to be
+          seen, heard and remembered.
+
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- LATEST VISUAL -->
+
+    <section class="video-section">
+
+      <div class="video-box">
+
+        <div class="play">
+          ▶
+        </div>
+
+        <div class="video-label">
+          NGS / Latest Visual
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CONTACT -->
+
+    <section class="contact" id="contact">
+
+      <div class="section-number">
+        04 / CONTACT
+      </div>
+
+      <h2 class="contact-title">
+        Your name<br>
+        belongs here.
+      </h2>
+
+
+      <a
+        href="mailto:nextgenstars.uk@outlook.com"
+        class="contact-link"
+      >
+        nextgenstars.uk@outlook.com
+      </a>
+
+
+      <div class="social-links">
+
+        <a
+          href="https://www.tiktok.com/@nextgenstarsuk"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-link"
+        >
+          TikTok&nbsp;&nbsp;/&nbsp;&nbsp;@nextgenstarsuk
+        </a>
+
+
+        <a
+          href="https://www.instagram.com/nextgenstarsuk"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-link"
+        >
+          Instagram&nbsp;&nbsp;/&nbsp;&nbsp;@nextgenstarsuk
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
 
 
   <!-- FOOTER -->
+
   <footer>
 
-    <div>
-      <strong>NGS★</strong>
+    <div class="footer-logo">
+      NGS★
     </div>
 
     <div>
@@ -320,6 +1436,375 @@
     </div>
 
   </footer>
+
+
+  <!-- SUPABASE -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+
+
+  <script>
+
+    /* =========================
+       SUPABASE
+    ========================= */
+
+    const supabaseClient = window.supabase.createClient(
+      window.NGS_CONFIG.url,
+      window.NGS_CONFIG.publishableKey
+    );
+
+
+    /* =========================
+       FREESTYLE PLAYER
+    ========================= */
+
+    const freestyleList =
+      document.getElementById("freestyleList");
+
+    const freestyleCount =
+      document.getElementById("freestyleCount");
+
+
+    let currentAudio = null;
+    let currentButton = null;
+
+
+    function formatTime(seconds) {
+
+      if (!Number.isFinite(seconds)) {
+        return "0:00";
+      }
+
+      const minutes =
+        Math.floor(seconds / 60);
+
+      const remaining =
+        Math.floor(seconds % 60)
+          .toString()
+          .padStart(2, "0");
+
+      return `${minutes}:${remaining}`;
+
+    }
+
+
+    function stopCurrent() {
+
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+
+      if (currentButton) {
+        currentButton.textContent = "▶";
+      }
+
+      currentAudio = null;
+      currentButton = null;
+
+    }
+
+
+    async function loadFreestyles() {
+
+      const {
+        data,
+        error
+      } = await supabaseClient
+
+        .from("freestyles")
+
+        .select(`
+          id,
+          title,
+          audio_url,
+          created_at,
+          artist_id,
+          artists (
+            id,
+            name
+          )
+        `)
+
+        .eq("published", true)
+
+        .order("created_at", {
+          ascending: false
+        })
+
+        .limit(4);
+
+
+      if (error) {
+
+        console.error(
+          "Freestyle loading error:",
+          error
+        );
+
+        freestyleList.innerHTML = `
+          <div class="freestyle-empty">
+            Freestyles coming soon.
+          </div>
+        `;
+
+        freestyleCount.textContent =
+          "Coming Soon";
+
+        return;
+
+      }
+
+
+      if (!data || data.length === 0) {
+
+        freestyleList.innerHTML = `
+          <div class="freestyle-empty">
+            No freestyles yet.
+          </div>
+        `;
+
+        freestyleCount.textContent =
+          "0 Freestyles";
+
+        return;
+
+      }
+
+
+      freestyleList.innerHTML = "";
+
+
+      data.forEach((track, index) => {
+
+        const row =
+          document.createElement("div");
+
+        row.className =
+          "freestyle-row";
+
+
+        const artistName =
+          track.artists?.name ||
+          "Unknown Artist";
+
+
+        const artistId =
+          track.artists?.id ||
+          track.artist_id;
+
+
+        row.innerHTML = `
+
+          <button
+            class="freestyle-play"
+            aria-label="Play ${track.title}"
+          >
+            ▶
+          </button>
+
+
+          <div class="freestyle-main">
+
+            <div class="freestyle-track-title">
+              ${escapeHtml(track.title)}
+            </div>
+
+            <a
+              class="freestyle-artist"
+              href="artist.html?id=${encodeURIComponent(artistId)}"
+            >
+              ${escapeHtml(artistName)}
+            </a>
+
+          </div>
+
+
+          <div
+            class="freestyle-progress"
+            aria-label="Seek"
+          >
+            <div
+              class="freestyle-progress-fill"
+            ></div>
+          </div>
+
+
+          <div class="freestyle-time">
+            0:00
+          </div>
+
+        `;
+
+
+        freestyleList.appendChild(row);
+
+
+        const button =
+          row.querySelector(".freestyle-play");
+
+        const progress =
+          row.querySelector(".freestyle-progress");
+
+        const fill =
+          row.querySelector(
+            ".freestyle-progress-fill"
+          );
+
+        const time =
+          row.querySelector(".freestyle-time");
+
+
+        const audio =
+          new Audio(track.audio_url);
+
+
+        audio.preload = "metadata";
+
+
+        audio.addEventListener(
+          "loadedmetadata",
+          () => {
+
+            time.textContent =
+              `0:00 / ${formatTime(audio.duration)}`;
+
+          }
+        );
+
+
+        audio.addEventListener(
+          "timeupdate",
+          () => {
+
+            const percentage =
+              audio.duration
+                ? (audio.currentTime /
+                    audio.duration) * 100
+                : 0;
+
+            fill.style.width =
+              `${percentage}%`;
+
+
+            time.textContent =
+              `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+
+          }
+        );
+
+
+        audio.addEventListener(
+          "ended",
+          () => {
+
+            button.textContent = "▶";
+
+            fill.style.width = "0%";
+
+            time.textContent =
+              `0:00 / ${formatTime(audio.duration)}`;
+
+            if (currentAudio === audio) {
+
+              currentAudio = null;
+              currentButton = null;
+
+            }
+
+          }
+        );
+
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            if (
+              currentAudio &&
+              currentAudio !== audio
+            ) {
+              stopCurrent();
+            }
+
+
+            if (audio.paused) {
+
+              audio.play();
+
+              button.textContent = "Ⅱ";
+
+              currentAudio =
+                audio;
+
+              currentButton =
+                button;
+
+            } else {
+
+              audio.pause();
+
+              button.textContent = "▶";
+
+            }
+
+          }
+        );
+
+
+        progress.addEventListener(
+          "click",
+          (event) => {
+
+            if (!audio.duration) {
+              return;
+            }
+
+            const rect =
+              progress.getBoundingClientRect();
+
+            const percentage =
+              (event.clientX - rect.left) /
+              rect.width;
+
+            audio.currentTime =
+              percentage *
+              audio.duration;
+
+          }
+        );
+
+      });
+
+
+      freestyleCount.textContent =
+        `${data.length} Latest Freestyles`;
+
+    }
+
+
+    function escapeHtml(value) {
+
+      return String(value)
+
+        .replaceAll("&", "&amp;")
+
+        .replaceAll("<", "&lt;")
+
+        .replaceAll(">", "&gt;")
+
+        .replaceAll('"', "&quot;")
+
+        .replaceAll("'", "&#039;");
+
+    }
+
+
+    loadFreestyles();
+
+  </script>
 
 </body>
 </html>
