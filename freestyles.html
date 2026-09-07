@@ -1,1 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Freestyles — NGS</title>
+  <meta name="description" content="Listen to the latest NGS freestyles from the next generation of artists.">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #050505;
+      --white: #f5f5f5;
+      --grey: #888;
+      --dark: #0b0b0b;
+      --line: #202020;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .nav {
+      height: 75px;
+      padding: 0 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -2px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      color: #777;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: .2s;
+    }
+
+    .nav-links a:hover {
+      color: white;
+    }
+
+    .container {
+      width: min(1200px, 86%);
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 110px 0 100px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      color: #555;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+    }
+
+    .hero h1 {
+      font-size: clamp(70px, 13vw, 180px);
+      line-height: .78;
+      letter-spacing: -10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      max-width: 1000px;
+    }
+
+    .hero h1 span {
+      color: #555;
+    }
+
+    .hero-copy {
+      max-width: 600px;
+      margin-top: 45px;
+      color: #aaa;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .tracks-section {
+      padding: 90px 0 140px;
+    }
+
+    .section-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 30px;
+      margin-bottom: 35px;
+    }
+
+    .section-number {
+      color: #555;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: clamp(45px, 7vw, 80px);
+      line-height: .85;
+      letter-spacing: -5px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .track-count {
+      color: #666;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .track-list {
+      display: grid;
+      gap: 2px;
+      background: var(--line);
+    }
+
+    .track {
+      background: #080808;
+      padding: 25px;
+      display: grid;
+      grid-template-columns: 65px 1fr auto;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .play-button {
+      width: 55px;
+      height: 55px;
+      border: 1px solid #444;
+      background: transparent;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: .2s;
+    }
+
+    .play-button:hover {
+      background: white;
+      color: black;
+      border-color: white;
+    }
+
+    .track-main {
+      min-width: 0;
+    }
+
+    .track-title {
+      font-size: 22px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+      margin-bottom: 7px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .track-artist {
+      color: #777;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .track-artist a:hover {
+      color: white;
+    }
+
+    .track-right {
+      min-width: 90px;
+      text-align: right;
+    }
+
+    .track-duration {
+      color: #666;
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+
+    .progress-wrap {
+      margin-top: 18px;
+      height: 3px;
+      background: #222;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: white;
+      transition: width .1s linear;
+    }
+
+    .empty {
+      padding: 50px 25px;
+      background: #080808;
+      color: #666;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .loading {
+      padding: 50px 25px;
+      background: #080808;
+      color: #666;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .player {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(5, 5, 5, .97);
+      border-top: 1px solid #252525;
+      padding: 15px 5%;
+      z-index: 100;
+      display: none;
+    }
+
+    .player.show {
+      display: block;
+    }
+
+    .player-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 55px 1fr auto;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .player-button {
+      width: 45px;
+      height: 45px;
+      border: 1px solid #555;
+      background: white;
+      color: black;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .player-info {
+      min-width: 0;
+    }
+
+    .player-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .player-artist {
+      color: #666;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .player-time {
+      color: #777;
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 800px) {
+
+      .nav {
+        padding: 0 5%;
+      }
+
+      .nav-links {
+        gap: 15px;
+      }
+
+      .nav-links a {
+        font-size: 8px;
+      }
+
+      .container {
+        width: 90%;
+      }
+
+      .hero {
+        padding: 80px 0 75px;
+      }
+
+      .hero h1 {
+        letter-spacing: -6px;
+      }
+
+      .hero-copy {
+        font-size: 16px;
+      }
+
+      .tracks-section {
+        padding: 65px 0 120px;
+      }
+
+      .section-top {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .section-title {
+        letter-spacing: -3px;
+      }
+
+      .track {
+        grid-template-columns: 50px 1fr;
+        gap: 15px;
+        padding: 20px;
+      }
+
+      .play-button {
+        width: 45px;
+        height: 45px;
+      }
+
+      .track-right {
+        display: none;
+      }
+
+      .track-title {
+        font-size: 17px;
+      }
+
+      .player-inner {
+        grid-template-columns: 45px 1fr;
+        gap: 15px;
+      }
+
+      .player-time {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="nav">
+
+    <a href="index.html" class="logo">
+      NGS★
+    </a>
+
+    <div class="nav-links">
+      <a href="artists.html">Artists</a>
+      <a href="freestyles.html">Freestyles</a>
+      <a href="vision.html">Vision</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+
+  </nav>
+
+
+  <main>
+
+    <section class="hero">
+
+      <div class="container">
+
+        <div class="eyebrow">
+          02 / Listen
+        </div>
+
+        <h1>
+          Free<br>
+          <span>styles.</span>
+        </h1>
+
+        <p class="hero-copy">
+          Every sound. Every style. One place.
+          Listen to the latest freestyles from the next generation.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <section class="tracks-section">
+
+      <div class="container">
+
+        <div class="section-top">
+
+          <div>
+            <div class="section-number">
+              NGS / Audio
+            </div>
+
+            <h2 class="section-title">
+              Latest
+            </h2>
+          </div>
+
+          <div id="trackCount" class="track-count">
+            Loading
+          </div>
+
+        </div>
+
+
+        <div id="trackList" class="track-list">
+
+          <div class="loading">
+            Loading freestyles...
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <div id="player" class="player">
+
+    <div class="player-inner">
+
+      <button
+        id="playerButton"
+        class="player-button"
+      >
+        ▶
+      </button>
+
+      <div class="player-info">
+
+        <div id="playerTitle" class="player-title">
+          —
+        </div>
+
+        <div id="playerArtist" class="player-artist">
+          —
+        </div>
+
+      </div>
+
+      <div id="playerTime" class="player-time">
+        0:00 / 0:00
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const supabaseClient = window.supabase.createClient(
+      window.NGS_CONFIG.url,
+      window.NGS_CONFIG.publishableKey
+    );
+
+    const $ = id => document.getElementById(id);
+
+    let tracks = [];
+    let currentTrack = null;
+
+    const audio = new Audio();
+
+    audio.preload = "metadata";
+
+
+    function escapeHtml(value) {
+
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    function formatTime(seconds) {
+
+      if (!Number.isFinite(seconds)) {
+        return "0:00";
+      }
+
+      const minutes =
+        Math.floor(seconds / 60);
+
+      const remaining =
+        Math.floor(seconds % 60)
+          .toString()
+          .padStart(2, "0");
+
+      return `${minutes}:${remaining}`;
+
+    }
+
+
+    async function loadFreestyles() {
+
+      const {
+        data,
+        error
+      } = await supabaseClient
+
+        .from("freestyles")
+
+        .select(`
+          id,
+          title,
+          audio_url,
+          created_at,
+          artist_id,
+          artists (
+            id,
+            name
+          )
+        `)
+
+        .eq("published", true)
+
+        .order("created_at", {
+          ascending: false
+        });
+
+
+      if (error) {
+
+        console.error(error);
+
+        $("trackList").innerHTML = `
+          <div class="empty">
+            Could not load freestyles.
+          </div>
+        `;
+
+        $("trackCount").textContent =
+          "Error";
+
+        return;
+
+      }
+
+
+      tracks = data || [];
+
+      $("trackCount").textContent =
+        `${tracks.length} ${tracks.length === 1 ? "Freestyle" : "Freestyles"}`;
+
+      renderTracks();
+
+    }
+
+
+    function renderTracks() {
+
+      if (!tracks.length) {
+
+        $("trackList").innerHTML = `
+          <div class="empty">
+            No freestyles available yet.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      $("trackList").innerHTML =
+        tracks.map((track, index) => {
+
+          const artist =
+            track.artists
+              ? track.artists.name
+              : "Unknown Artist";
+
+          const artistId =
+            track.artists
+              ? track.artists.id
+              : track.artist_id;
+
+          return `
+
+            <div
+              class="track"
+              data-index="${index}"
+            >
+
+              <button
+                class="play-button"
+                onclick="playTrack(${index})"
+                aria-label="Play ${escapeHtml(track.title)}"
+              >
+                ▶
+              </button>
+
+
+              <div class="track-main">
+
+                <div class="track-title">
+                  ${escapeHtml(track.title)}
+                </div>
+
+                <div class="track-artist">
+
+                  <a href="artist.html?id=${encodeURIComponent(artistId)}">
+                    ${escapeHtml(artist)}
+                  </a>
+
+                </div>
+
+                <div
+                  class="progress-wrap"
+                  onclick="seekTrack(event, ${index})"
+                >
+
+                  <div
+                    class="progress"
+                    id="progress-${index}"
+                  ></div>
+
+                </div>
+
+              </div>
+
+
+              <div class="track-right">
+
+                <div
+                  class="track-duration"
+                  id="duration-${index}"
+                >
+                  —
+                </div>
+
+              </div>
+
+            </div>
+
+          `;
+
+        }).join("");
+
+
+      tracks.forEach((track, index) => {
+
+        const tempAudio =
+          new Audio();
+
+        tempAudio.preload =
+          "metadata";
+
+        tempAudio.src =
+          track.audio_url;
+
+        tempAudio.addEventListener(
+          "loadedmetadata",
+          () => {
+
+            const duration =
+              $(`duration-${index}`);
+
+            if (duration) {
+
+              duration.textContent =
+                formatTime(tempAudio.duration);
+
+            }
+
+          }
+        );
+
+      });
+
+    }
+
+
+    window.playTrack = function(index) {
+
+      const track =
+        tracks[index];
+
+      if (!track) return;
+
+
+      if (currentTrack === index) {
+
+        if (audio.paused) {
+
+          audio.play();
+
+        } else {
+
+          audio.pause();
+
+        }
+
+        return;
+
+      }
+
+
+      currentTrack = index;
+
+      audio.src =
+        track.audio_url;
+
+      audio.play();
+
+      const artist =
+        track.artists
+          ? track.artists.name
+          : "Unknown Artist";
+
+
+      $("playerTitle").textContent =
+        track.title;
+
+      $("playerArtist").textContent =
+        artist;
+
+      $("player").classList.add("show");
+
+      updatePlayButtons();
+
+    };
+
+
+    function updatePlayButtons() {
+
+      document
+        .querySelectorAll(".play-button")
+        .forEach((button, index) => {
+
+          if (
+            index === currentTrack &&
+            !audio.paused
+          ) {
+
+            button.textContent = "Ⅱ";
+
+          } else {
+
+            button.textContent = "▶";
+
+          }
+
+        });
+
+      $("playerButton").textContent =
+        audio.paused
+          ? "▶"
+          : "Ⅱ";
+
+    }
+
+
+    $("playerButton").addEventListener(
+      "click",
+      () => {
+
+        if (!audio.src) return;
+
+        if (audio.paused) {
+
+          audio.play();
+
+        } else {
+
+          audio.pause();
+
+        }
+
+      }
+    );
+
+
+    audio.addEventListener(
+      "play",
+      updatePlayButtons
+    );
+
+
+    audio.addEventListener(
+      "pause",
+      updatePlayButtons
+    );
+
+
+    audio.addEventListener(
+      "timeupdate",
+      () => {
+
+        if (currentTrack === null) {
+          return;
+        }
+
+        const progress =
+          $(`progress-${currentTrack}`);
+
+        if (progress && audio.duration) {
+
+          progress.style.width =
+            `${(audio.currentTime / audio.duration) * 100}%`;
+
+        }
+
+        $("playerTime").textContent =
+          `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+
+      }
+    );
+
+
+    audio.addEventListener(
+      "ended",
+      () => {
+
+        if (
+          currentTrack !== null &&
+          currentTrack < tracks.length - 1
+        ) {
+
+          playTrack(currentTrack + 1);
+
+        } else {
+
+          updatePlayButtons();
+
+        }
+
+      }
+    );
+
+
+    window.seekTrack = function(event, index) {
+
+      const track =
+        tracks[index];
+
+      if (!track) return;
+
+      const bar =
+        event.currentTarget;
+
+      const rect =
+        bar.getBoundingClientRect();
+
+      const percentage =
+        (event.clientX - rect.left) /
+        rect.width;
+
+      const clamped =
+        Math.max(
+          0,
+          Math.min(1, percentage)
+        );
+
+
+      if (currentTrack !== index) {
+
+        currentTrack = index;
+
+        audio.src =
+          track.audio_url;
+
+        const artist =
+          track.artists
+            ? track.artists.name
+            : "Unknown Artist";
+
+        $("playerTitle").textContent =
+          track.title;
+
+        $("playerArtist").textContent =
+          artist;
+
+        $("player").classList.add("show");
+
+      }
+
+
+      const seek = () => {
+
+        if (audio.duration) {
+
+          audio.currentTime =
+            audio.duration * clamped;
+
+        }
+
+        audio.play();
+
+      };
+
+
+      if (audio.readyState >= 1) {
+
+        seek();
+
+      } else {
+
+        audio.addEventListener(
+          "loadedmetadata",
+          seek,
+          { once: true }
+        );
+
+      }
+
+    };
+
+
+    loadFreestyles();
+
+  </script>
+
+</body>
+</html>
