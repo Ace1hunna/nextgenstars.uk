@@ -7,6 +7,9 @@
   <title>Next Gen Stars — NGS</title>
   <meta name="description" content="Next Gen Stars — a platform for the next generation of artists, creators and stars.">
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+
   <style>
     * {
       margin: 0;
@@ -36,6 +39,10 @@
     a {
       color: inherit;
       text-decoration: none;
+    }
+
+    button {
+      font: inherit;
     }
 
     /* =========================
@@ -279,6 +286,162 @@
       color: #777;
       font-size: 11px;
       letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    /* =========================
+       FREESTYLES
+    ========================= */
+
+    .freestyles {
+      padding: 120px 7%;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .freestyle-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+
+    .freestyle-heading {
+      max-width: 850px;
+    }
+
+    .freestyle-number {
+      color: #555;
+      font-size: 11px;
+      letter-spacing: 3px;
+      margin-bottom: 25px;
+    }
+
+    .freestyle-title {
+      font-size: clamp(55px, 9vw, 130px);
+      line-height: .82;
+      letter-spacing: -7px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .freestyle-intro {
+      max-width: 350px;
+      color: #999;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 17px;
+      line-height: 1.8;
+    }
+
+    .freestyle-list {
+      display: grid;
+      gap: 2px;
+      background: var(--line);
+    }
+
+    .freestyle-card {
+      background: #080808;
+      padding: 25px;
+      display: grid;
+      grid-template-columns: 65px 1fr;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .freestyle-play {
+      width: 55px;
+      height: 55px;
+      border: 1px solid #444;
+      background: transparent;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: .2s;
+    }
+
+    .freestyle-play:hover {
+      background: white;
+      color: black;
+      border-color: white;
+    }
+
+    .freestyle-main {
+      min-width: 0;
+    }
+
+    .freestyle-track-title {
+      font-size: 22px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+      margin-bottom: 7px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .freestyle-artist {
+      color: #777;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .freestyle-artist a:hover {
+      color: white;
+    }
+
+    .freestyle-progress-wrap {
+      margin-top: 18px;
+      height: 3px;
+      background: #222;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .freestyle-progress {
+      height: 100%;
+      width: 0%;
+      background: white;
+    }
+
+    .freestyle-bottom {
+      margin-top: 35px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .freestyle-count {
+      color: #555;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .freestyle-button {
+      border-bottom: 1px solid #777;
+      padding-bottom: 8px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: .2s;
+    }
+
+    .freestyle-button:hover {
+      border-color: white;
+    }
+
+    .freestyle-empty {
+      background: #080808;
+      padding: 45px 25px;
+      color: #666;
+      font-size: 11px;
+      letter-spacing: 2px;
       text-transform: uppercase;
     }
 
@@ -536,6 +699,72 @@
     }
 
     /* =========================
+       AUDIO PLAYER
+    ========================= */
+
+    .audio-player {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 100;
+      background: rgba(5,5,5,.97);
+      border-top: 1px solid #252525;
+      padding: 14px 5%;
+      display: none;
+    }
+
+    .audio-player.show {
+      display: block;
+    }
+
+    .audio-player-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 50px 1fr auto;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .audio-player-button {
+      width: 45px;
+      height: 45px;
+      border: 1px solid #555;
+      background: white;
+      color: black;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .audio-player-info {
+      min-width: 0;
+    }
+
+    .audio-player-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .audio-player-artist {
+      color: #666;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .audio-player-time {
+      color: #777;
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+
+    /* =========================
        FOOTER
     ========================= */
 
@@ -568,11 +797,11 @@
       }
 
       .nav-links {
-        gap: 14px;
+        gap: 12px;
       }
 
       .nav-links a {
-        font-size: 9px;
+        font-size: 8px;
       }
 
       .hero {
@@ -608,6 +837,50 @@
       .artist {
         min-height: 350px;
       }
+
+      /* FREESTYLES MOBILE */
+
+      .freestyles {
+        padding: 90px 5%;
+      }
+
+      .freestyle-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 35px;
+        margin-bottom: 45px;
+      }
+
+      .freestyle-title {
+        letter-spacing: -4px;
+      }
+
+      .freestyle-intro {
+        font-size: 17px;
+        line-height: 1.8;
+      }
+
+      .freestyle-card {
+        grid-template-columns: 50px 1fr;
+        gap: 15px;
+        padding: 20px;
+      }
+
+      .freestyle-play {
+        width: 45px;
+        height: 45px;
+      }
+
+      .freestyle-track-title {
+        font-size: 17px;
+      }
+
+      .freestyle-bottom {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      /* FEATURE */
 
       .feature {
         padding: 90px 5%;
@@ -682,6 +955,19 @@
         font-size: 14px;
       }
 
+      .audio-player {
+        padding: 12px 5%;
+      }
+
+      .audio-player-inner {
+        grid-template-columns: 45px 1fr;
+        gap: 15px;
+      }
+
+      .audio-player-time {
+        display: none;
+      }
+
       footer {
         padding: 30px 5%;
       }
@@ -701,12 +987,12 @@
 
     <div class="nav-links">
       <a href="artists.html">Artists</a>
+      <a href="freestyles.html">Freestyles</a>
       <a href="#vision">Vision</a>
       <a href="#contact">Contact</a>
     </div>
 
   </nav>
-
 
   <!-- HERO -->
 
@@ -744,7 +1030,6 @@
 
     </section>
 
-
     <!-- MARQUEE -->
 
     <div class="marquee">
@@ -760,7 +1045,6 @@
 
     </div>
 
-
     <!-- ARTISTS -->
 
     <section class="section" id="artists">
@@ -768,7 +1052,9 @@
       <div class="section-head">
 
         <div>
-          <div class="section-number">01 / DISCOVER</div>
+          <div class="section-number">
+            01 / DISCOVER
+          </div>
         </div>
 
         <h2 class="section-title">
@@ -799,6 +1085,58 @@
 
     </section>
 
+    <!-- FREESTYLES -->
+
+    <section class="freestyles" id="freestyles">
+
+      <div class="freestyle-top">
+
+        <div class="freestyle-heading">
+
+          <div class="freestyle-number">
+            02 / LISTEN
+          </div>
+
+          <h2 class="freestyle-title">
+            Freestyles
+          </h2>
+
+        </div>
+
+        <p class="freestyle-intro">
+          Every sound. Every style.
+          Listen to the latest freestyles
+          from the next generation.
+        </p>
+
+      </div>
+
+
+      <div id="freestyleList" class="freestyle-list">
+
+        <div class="freestyle-empty">
+          Loading freestyles...
+        </div>
+
+      </div>
+
+
+      <div class="freestyle-bottom">
+
+        <div id="freestyleCount" class="freestyle-count">
+          Loading
+        </div>
+
+        <a
+          href="freestyles.html"
+          class="freestyle-button"
+        >
+          Explore All Freestyles →
+        </a>
+
+      </div>
+
+    </section>
 
     <!-- FEATURE -->
 
@@ -809,7 +1147,7 @@
         <div>
 
           <div class="feature-number">
-            02 / THE PLATFORM
+            03 / THE PLATFORM
           </div>
 
           <h2 class="feature-title">
@@ -827,16 +1165,11 @@
 
           NGS exists to find them early — giving upcoming
           talent a place to be seen, heard and remembered.
-
-          <br><br>
-
-          No gatekeepin. Just talent.
         </p>
 
       </div>
 
     </section>
-
 
     <!-- VIDEO -->
 
@@ -856,13 +1189,12 @@
 
     </section>
 
-
     <!-- VISION -->
 
     <section class="section about" id="vision">
 
       <div class="section-number">
-        03 / OUR VISION
+        04 / OUR VISION
       </div>
 
       <h2 class="about-title">
@@ -879,13 +1211,12 @@
 
     </section>
 
-
     <!-- TALENT OVER MONEY -->
 
     <section class="principle">
 
       <div class="principle-number">
-        04 / THE PRINCIPLE
+        05 / THE PRINCIPLE
       </div>
 
       <h2 class="principle-title">
@@ -913,13 +1244,12 @@
 
     </section>
 
-
     <!-- CONTACT -->
 
     <section class="contact" id="contact">
 
       <div class="section-number">
-        05 / CONTACT
+        06 / CONTACT
       </div>
 
       <h2 class="contact-title">
@@ -960,6 +1290,47 @@
 
   </main>
 
+  <!-- AUDIO PLAYER -->
+
+  <div id="audioPlayer" class="audio-player">
+
+    <div class="audio-player-inner">
+
+      <button
+        id="audioPlayerButton"
+        class="audio-player-button"
+      >
+        ▶
+      </button>
+
+      <div class="audio-player-info">
+
+        <div
+          id="audioPlayerTitle"
+          class="audio-player-title"
+        >
+          —
+        </div>
+
+        <div
+          id="audioPlayerArtist"
+          class="audio-player-artist"
+        >
+          —
+        </div>
+
+      </div>
+
+      <div
+        id="audioPlayerTime"
+        class="audio-player-time"
+      >
+        0:00 / 0:00
+      </div>
+
+    </div>
+
+  </div>
 
   <!-- FOOTER -->
 
@@ -979,6 +1350,497 @@
 
   </footer>
 
+
+  <!-- FREESTYLE SYSTEM -->
+
+  <script>
+
+    const supabaseClient =
+      window.supabase.createClient(
+        window.NGS_CONFIG.url,
+        window.NGS_CONFIG.publishableKey
+      );
+
+
+    const $ = id =>
+      document.getElementById(id);
+
+
+    let freestyles = [];
+    let currentFreestyle = null;
+
+
+    const audio = new Audio();
+
+    audio.preload = "metadata";
+
+
+    function escapeHtml(value) {
+
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    function formatTime(seconds) {
+
+      if (!Number.isFinite(seconds)) {
+        return "0:00";
+      }
+
+      const minutes =
+        Math.floor(seconds / 60);
+
+      const remaining =
+        Math.floor(seconds % 60)
+          .toString()
+          .padStart(2, "0");
+
+      return `${minutes}:${remaining}`;
+
+    }
+
+
+    async function loadHomepageFreestyles() {
+
+      const {
+        data,
+        error
+      } = await supabaseClient
+
+        .from("freestyles")
+
+        .select(`
+          id,
+          title,
+          audio_url,
+          created_at,
+          artist_id,
+          artists (
+            id,
+            name
+          )
+        `)
+
+        .eq("published", true)
+
+        .order("created_at", {
+          ascending: false
+        })
+
+        .limit(4);
+
+
+      if (error) {
+
+        console.error(
+          "Could not load freestyles:",
+          error
+        );
+
+        $("freestyleList").innerHTML = `
+          <div class="freestyle-empty">
+            Could not load freestyles.
+          </div>
+        `;
+
+        $("freestyleCount").textContent =
+          "Unavailable";
+
+        return;
+
+      }
+
+
+      freestyles = data || [];
+
+
+      $("freestyleCount").textContent =
+        freestyles.length
+          ? `Latest ${freestyles.length} freestyles`
+          : "No freestyles yet";
+
+
+      renderHomepageFreestyles();
+
+    }
+
+
+    function renderHomepageFreestyles() {
+
+      if (!freestyles.length) {
+
+        $("freestyleList").innerHTML = `
+          <div class="freestyle-empty">
+            No freestyles available yet.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      $("freestyleList").innerHTML =
+        freestyles
+          .map((track, index) => {
+
+            const artist =
+              track.artists
+                ? track.artists.name
+                : "Unknown Artist";
+
+
+            const artistId =
+              track.artists
+                ? track.artists.id
+                : track.artist_id;
+
+
+            return `
+
+              <div
+                class="freestyle-card"
+                data-index="${index}"
+              >
+
+                <button
+                  class="freestyle-play"
+                  onclick="playHomepageFreestyle(${index})"
+                  aria-label="Play ${escapeHtml(track.title)}"
+                >
+                  ▶
+                </button>
+
+
+                <div class="freestyle-main">
+
+                  <div class="freestyle-track-title">
+                    ${escapeHtml(track.title)}
+                  </div>
+
+
+                  <div class="freestyle-artist">
+
+                    <a
+                      href="artist.html?id=${encodeURIComponent(artistId)}"
+                    >
+                      ${escapeHtml(artist)}
+                    </a>
+
+                  </div>
+
+
+                  <div
+                    class="freestyle-progress-wrap"
+                    onclick="seekHomepageFreestyle(event, ${index})"
+                  >
+
+                    <div
+                      class="freestyle-progress"
+                      id="freestyle-progress-${index}"
+                    ></div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            `;
+
+          })
+          .join("");
+
+    }
+
+
+    window.playHomepageFreestyle =
+      function(index) {
+
+        const track =
+          freestyles[index];
+
+        if (!track) {
+          return;
+        }
+
+
+        if (currentFreestyle === index) {
+
+          if (audio.paused) {
+
+            audio.play();
+
+          } else {
+
+            audio.pause();
+
+          }
+
+          return;
+
+        }
+
+
+        currentFreestyle = index;
+
+
+        audio.src =
+          track.audio_url;
+
+
+        const artist =
+          track.artists
+            ? track.artists.name
+            : "Unknown Artist";
+
+
+        $("audioPlayerTitle").textContent =
+          track.title;
+
+
+        $("audioPlayerArtist").textContent =
+          artist;
+
+
+        $("audioPlayer").classList.add("show");
+
+
+        audio.play();
+
+
+        updateHomepagePlayButtons();
+
+      };
+
+
+    function updateHomepagePlayButtons() {
+
+      document
+        .querySelectorAll(".freestyle-play")
+        .forEach((button, index) => {
+
+          if (
+            index === currentFreestyle &&
+            !audio.paused
+          ) {
+
+            button.textContent = "Ⅱ";
+
+          } else {
+
+            button.textContent = "▶";
+
+          }
+
+        });
+
+
+      $("audioPlayerButton").textContent =
+        audio.paused
+          ? "▶"
+          : "Ⅱ";
+
+    }
+
+
+    $("audioPlayerButton")
+      .addEventListener(
+        "click",
+        () => {
+
+          if (!audio.src) {
+            return;
+          }
+
+
+          if (audio.paused) {
+
+            audio.play();
+
+          } else {
+
+            audio.pause();
+
+          }
+
+        }
+      );
+
+
+    audio.addEventListener(
+      "play",
+      updateHomepagePlayButtons
+    );
+
+
+    audio.addEventListener(
+      "pause",
+      updateHomepagePlayButtons
+    );
+
+
+    audio.addEventListener(
+      "timeupdate",
+      () => {
+
+        if (currentFreestyle === null) {
+          return;
+        }
+
+
+        const progress =
+          $(
+            `freestyle-progress-${currentFreestyle}`
+          );
+
+
+        if (
+          progress &&
+          audio.duration
+        ) {
+
+          progress.style.width =
+            `${
+              (audio.currentTime /
+              audio.duration) * 100
+            }%`;
+
+        }
+
+
+        $("audioPlayerTime").textContent =
+          `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+
+      }
+    );
+
+
+    audio.addEventListener(
+      "ended",
+      () => {
+
+        if (
+          currentFreestyle !== null &&
+          currentFreestyle <
+          freestyles.length - 1
+        ) {
+
+          playHomepageFreestyle(
+            currentFreestyle + 1
+          );
+
+        } else {
+
+          updateHomepagePlayButtons();
+
+        }
+
+      }
+    );
+
+
+    window.seekHomepageFreestyle =
+      function(event, index) {
+
+        const track =
+          freestyles[index];
+
+        if (!track) {
+          return;
+        }
+
+
+        const bar =
+          event.currentTarget;
+
+
+        const rect =
+          bar.getBoundingClientRect();
+
+
+        const percentage =
+          (event.clientX - rect.left) /
+          rect.width;
+
+
+        const clamped =
+          Math.max(
+            0,
+            Math.min(1, percentage)
+          );
+
+
+        if (currentFreestyle !== index) {
+
+          currentFreestyle = index;
+
+          audio.src =
+            track.audio_url;
+
+
+          const artist =
+            track.artists
+              ? track.artists.name
+              : "Unknown Artist";
+
+
+          $("audioPlayerTitle").textContent =
+            track.title;
+
+
+          $("audioPlayerArtist").textContent =
+            artist;
+
+
+          $("audioPlayer").classList.add(
+            "show"
+          );
+
+        }
+
+
+        const seek = () => {
+
+          if (audio.duration) {
+
+            audio.currentTime =
+              audio.duration * clamped;
+
+          }
+
+
+          audio.play();
+
+        };
+
+
+        if (audio.readyState >= 1) {
+
+          seek();
+
+        } else {
+
+          audio.addEventListener(
+            "loadedmetadata",
+            seek,
+            { once: true }
+          );
+
+        }
+
+      };
+
+
+    loadHomepageFreestyles();
+
+  </script>
+
 </body>
 </html>
-      
