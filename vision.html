@@ -1,1 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Our Vision — NGS</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* NAV */
+    nav {
+      height: 80px;
+      padding: 0 5vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #222;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .nav-links a {
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.5;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 75vh;
+      padding: 10vh 5vw 8vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-bottom: 1px solid #222;
+    }
+
+    .eyebrow {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 30px;
+      color: #aaa;
+    }
+
+    .hero h1 {
+      font-size: clamp(58px, 10vw, 150px);
+      line-height: 0.85;
+      letter-spacing: -7px;
+      font-weight: 900;
+      max-width: 1200px;
+    }
+
+    /* CONTENT */
+    .section {
+      padding: 12vh 5vw;
+      border-bottom: 1px solid #222;
+    }
+
+    .section-label {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #aaa;
+      margin-bottom: 60px;
+    }
+
+    .section-title {
+      font-size: clamp(52px, 8vw, 120px);
+      line-height: 0.9;
+      letter-spacing: -5px;
+      font-weight: 900;
+      margin-bottom: 50px;
+    }
+
+    .section-text {
+      max-width: 700px;
+      font-size: clamp(20px, 2.3vw, 30px);
+      line-height: 1.35;
+      color: #ddd;
+    }
+
+    /* CLOSING */
+    .closing {
+      min-height: 70vh;
+      padding: 12vh 5vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .closing h2 {
+      font-size: clamp(48px, 8vw, 120px);
+      line-height: 0.9;
+      letter-spacing: -5px;
+      font-weight: 900;
+      max-width: 1100px;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 60px;
+      padding: 17px 25px;
+      border: 1px solid #fff;
+      font-size: 14px;
+      font-weight: 700;
+      width: fit-content;
+      transition: all 0.2s ease;
+    }
+
+    .back:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 35px 5vw;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      border-top: 1px solid #222;
+      font-size: 12px;
+      color: #777;
+    }
+
+    footer strong {
+      color: #fff;
+    }
+
+    /* MOBILE */
+    @media (max-width: 700px) {
+      nav {
+        height: 70px;
+        padding: 0 20px;
+      }
+
+      .nav-links {
+        gap: 14px;
+        font-size: 11px;
+      }
+
+      .hero {
+        padding: 8vh 20px;
+        min-height: 70vh;
+      }
+
+      .hero h1 {
+        letter-spacing: -4px;
+      }
+
+      .section,
+      .closing {
+        padding: 10vh 20px;
+      }
+
+      .section-label {
+        margin-bottom: 40px;
+      }
+
+      .section-title,
+      .closing h2 {
+        letter-spacing: -3px;
+      }
+
+      .section-text {
+        font-size: 19px;
+      }
+
+      footer {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo">NGS★</a>
+
+    <div class="nav-links">
+      <a href="artists.html">Artists</a>
+      <a href="freestyles.html">Freestyles</a>
+      <a href="vision.html">Vision</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </nav>
+
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <div class="eyebrow">
+      03 / OUR VISION
+    </div>
+
+    <h1>
+      We don't follow<br>
+      the next wave.<br>
+      We create it.
+    </h1>
+
+  </section>
+
+
+  <!-- THE IDEA -->
+  <section class="section">
+
+    <div class="section-label">
+      THE IDEA
+    </div>
+
+    <h2 class="section-title">
+      Find them early.
+    </h2>
+
+    <p class="section-text">
+      The biggest artists in the world all started somewhere.
+      Before the numbers, before the recognition, before everyone
+      knew their name.
+      <br><br>
+      NGS exists to find those artists while they're still building.
+      To give upcoming talent a place to be discovered, heard and
+      remembered before the world catches up.
+    </p>
+
+  </section>
+
+
+  <!-- THE PRINCIPLE -->
+  <section class="section">
+
+    <div class="section-label">
+      THE PRINCIPLE
+    </div>
+
+    <h2 class="section-title">
+      Talent over Money.
+    </h2>
+
+    <p class="section-text">
+      NGS isn't about who has the biggest budget, the biggest
+      following or the right connections.
+      <br><br>
+      It's about talent.
+      <br><br>
+      A platform where potential matters more than popularity,
+      and where the next generation gets the opportunity to build
+      something real.
+    </p>
+
+  </section>
+
+
+  <!-- CLOSING -->
+  <section class="closing">
+
+    <h2>
+      The next generation deserves a place to start.
+    </h2>
+
+    <a href="index.html" class="back">
+      ← Back to NGS
+    </a>
+
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer>
+
+    <div>
+      <strong>NGS★</strong>
+    </div>
+
+    <div>
+      © 2026 Next Gen Stars
+    </div>
+
+    <div>
+      London, UK
+    </div>
+
+  </footer>
+
+</body>
+</html>
